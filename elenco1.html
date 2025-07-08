@@ -41,6 +41,23 @@
       user-select: none;
       transition: transform .3s;
     }
+
+    /* si espande e occupa due colonne (2/3 della riga se 3 colonne) */
+    .classe.expanded {
+      grid-column: span 2;
+      z-index: 2;
+    }
+
+    /* Responsive fix: su schermi piccoli la card espansa occupa tutta la riga */
+    @media (max-width: 767.98px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+      .classe.expanded {
+        grid-column: 1 / -1;
+      }
+    }
+
     .classe:hover {
       transform: translateY(-2px);
     }
@@ -348,11 +365,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Toggle apertura/chiusura al click sull'intestazione
-    classi.forEach(classe => {
-        classe.querySelector('h5').addEventListener('click', () => {
-            classe.classList.toggle('collapsed');
+classi.forEach(classe => {
+    classe.addEventListener('click', function(e) {
+        // Evita che il click su un link all'interno della classe attivi l'espansione
+        if (e.target.tagName.toLowerCase() === 'a') return;
+        // Se già espansa, richiudi
+        const isExpanded = classe.classList.contains('expanded');
+        classi.forEach(c => {
+            c.classList.add('collapsed');
+            c.classList.remove('expanded');
+            c.style.opacity = '';
         });
+        if (!isExpanded) {
+            classe.classList.remove('collapsed');
+            classe.classList.add('expanded');
+            // Rendi le altre più trasparenti se vuoi (opzionale)
+            classi.forEach(c => {
+                if (c !== classe) {
+                    c.style.opacity = '0.5';
+                }
+            });
+        }
     });
+});
     
     // Funzione per la ricerca
     function eseguiRicerca(q) {
