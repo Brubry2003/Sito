@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gruppi WhatsApp Matricole - UniVR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <!-- Bootstrap e Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  
+  <!-- Libreria Fuse.js per ricerca fuzzy -->
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+  
+  <style>
+    /* Navbar */
+    .navbar {
+      background-color: #004d99;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .navbar .navbar-brand,
+    .navbar .nav-link {
+      color: #fff;
+      font-weight: 500;
+    }
+    .navbar .nav-link:hover {
+      color: #ffcc00;
+    }
+    
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(rgba(0, 77, 153, 0.8), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23004d99"/><path d="M0 0L100 100M100 0L0 100" stroke="%23003a75" stroke-width="1"/></svg>');
+      background-size: cover;
+      color: white;
+      padding: 4rem 0;
+      margin-bottom: 3rem;
+    }
+    
+    .hero h1 {
+      font-weight: 700;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+    
+    .hero h2 {
+      font-weight: 400;
+      font-size: 1.8rem;
+    }
+    
+    .hero h3 {
+      font-weight: 300;
+      font-size: 1.3rem;
+    }
+
+    /* Container griglia 3 colonne */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Card dipartimenti */
+    .classe {
+      border: 1px solid #dee2e6;
+      border-radius: 10px;
+      padding: 1.5rem;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.3s ease;
+    }
+    .classe:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      border-color: #004d99;
+    }
+
+    /* Titolo con freccetta */
+    .classe h5 {
+      margin-bottom: 0.75rem;
+      font-size: 1.3rem;
+      padding-right: 30px;
+      position: relative;
+      color: #004d99;
+      font-weight: 600;
+    }
+    .classe h5::after {
+      content: "\f078"; /* freccia giù FontAwesome */
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: transform 0.3s ease;
+      pointer-events: none;
+      color: #666;
+    }
+    /* Ruota freccia se aperto */
+    .classe:not(.collapsed) h5::after {
+      transform: translateY(-50%) rotate(-90deg);
+      color: #004d99;
+    }
+
+    /* Lista corsi nascosta di default */
+    .classe ul {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 1rem;
+      margin-bottom: 0;
+      display: none;
+    }
+    .classe:not(.collapsed) ul {
+      display: block;
+    }
+    .classe ul li {
+      margin-bottom: 0.7rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    .classe ul li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #004d99;
+      font-size: 1.2rem;
+      top: -0.1rem;
+    }
+    .classe ul li a {
+      text-decoration: none;
+      color: #333;
+      transition: color 0.2s;
+      display: block;
+      padding: 0.2rem 0;
+    }
+    .classe ul li a:hover {
+      color: #004d99;
+      text-decoration: underline;
+    }
+    
+    /* Badge per nuovo */
+    .new-badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: #ff6b6b;
+      color: white;
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      z-index: 10;
+    }
+
+    /* Ricerca */
+    .search-container {
+      position: relative;
+      margin: 2rem 0;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      color: #666;
+      pointer-events: none;
+    }
+    #searchInput {
+      padding: 12px 20px;
+      border-radius: 50px;
+      border: 2px solid #ddd;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+    }
+    #searchInput:focus {
+      border-color: #004d99;
+      box-shadow: 0 0 0 0.25rem rgba(0, 77, 153, 0.25);
+    }
+    
+    /* Did you mean */
+    .did-you-mean {
+      text-align: center;
+      margin-top: 10px;
+      color: #666;
+      font-style: italic;
+    }
+    .did-you-mean a {
+      color: #004d99;
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .did-you-mean a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Messaggio nessun risultato */
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      background: #f8f9fa;
+      border-radius: 10px;
+      margin: 2rem 0;
+      display: none;
+    }
+    .no-results i {
+      font-size: 3rem;
+      color: #ccc;
+      margin-bottom: 1rem;
+    }
+    
+    /* Animazioni */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+    
+    /* Highlight dei termini trovati */
+    .highlight {
+      background-color: #fff9c4;
+      padding: 0 3px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <i class="fas fa-graduation-cap me-2"></i>Matricole Verona
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="#"><i class="fas fa-home me-1"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-building me-1"></i> Dipartimenti</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-envelope me-1"></i> Contatti</a></li>
+          <li class="nav-item"><a class="nav-link btn btn-outline-warning btn-sm ms-2" href="#"><i class="fab fa-whatsapp me-1"></i> Gruppi</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="container text-center">
+      <h1>GRUPPI WHATSAPP MATRICOLE</h1>
+      <h2>Università di Verona</h2>
+      <h3>Cerca il tuo dipartimento ed unisciti alla vita universitaria</h3>
+      <p class="mt-3">Oltre 5.000 matricole già collegate!</p>
+    </div>
+  </div>
+
+  <!-- Ricerca -->
+  <div class="container">
+    <div class="search-container">
+      <input type="text" id="searchInput" class="form-control" placeholder="Cerca dipartimento, facoltà o corso di laurea..." />
+      <i class="fas fa-search search-icon"></i>
+    </div>
+    
+    <div class="did-you-mean" id="didYouMean"></div>
+    <div class="no-results" id="noResults">
+      <i class="fas fa-search"></i>
+      <h4>Nessun risultato trovato</h4>
+      <p>Prova con termini diversi o controlla la tua ricerca</p>
+    </div>
+
+    <!-- Griglia dipartimenti -->
+    <div class="grid-container" id="gridContainer">
+
+      <div class="classe collapsed" data-classe="Biotecnologie">
+        <h5>Biotecnologie</h5>
+        <span class="new-badge">Nuovo</span>
+        <ul>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Biotecnologie</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Biotecnologie avanzate</a></li>
+        </ul>
+      </div>
+
+      <div class="classe collapsed" data-classe="Culture e Civiltà">
+        <h5>Culture e Civiltà</h5>
+        <ul>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Beni culturali</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Lettere</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Scienze della comunicazione</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Editoria e Giornalismo</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Linguistics</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Storia delle Arti</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Quaternario, preistoria e archeologia</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Scienze storiche</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Tradizione e interpretazione dei testi letterari</a></li>
+        </ul>
+      </div>
+
+      <div class="classe collapsed" data-classe="Diagnostica e Sanità Pubblica">
+        <h5>Diagnostica e Sanità Pubblica</h5>
+        <ul>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Tecniche ortopediche</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Tecniche della prevenzione nell'ambiente e nei luoghi di lavoro</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Tecniche avanzate in ortopedia e traumatologia</a></li>
+        </ul>
+      </div>
+
+      <div class="classe collapsed" data-classe="Informatica">
+        <h5>Informatica</h5>
+        <span class="new-badge">Popolare</span>
+        <ul>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Informatica</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Bioinformatica</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Informatica</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Bioinformatica</a></li>
+        </ul>
+      </div>
+
+      <div class="classe collapsed" data-classe="Ingegneria per la Medicina di Innovazione">
+        <h5>Ingegneria per la Medicina di Innovazione</h5>
+        <ul>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Ingegneria dei sistemi robotici e intelligenti</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Ingegneria dei sistemi medicali per la persona</a></li>
+        </ul>
+      </div>
+
+      <div class="classe collapsed" data-classe="Lingue e Letterature Straniere">
+        <h5>Lingue e Letterature Straniere</h5>
+        <ul>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Lingue e letterature straniere</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Lingue e letterature straniere</a></li>
+        </ul>
+      </div>
+
+      <div class="classe collapsed" data-classe="Management">
+        <h5>Management</h5>
+        <ul>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Economia aziendale</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Economia e commercio</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Economia e innovazione aziendale</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Marketing e comunicazione d'impresa</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Direzione aziendale</a></li>
+        </ul>
+      </div>
+
+      <div class="classe collapsed" data-classe="Medicina">
+        <h5>Medicina</h5>
+        <span class="new-badge">Nuovo</span>
+        <ul>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale a Ciclo Unico in Medicina e Chirurgia</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Tecniche di laboratorio biomedico</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Tecniche di radiologia medica, per immagini e radioterapia</a></li>
+        </ul>
+      </div>
+
+      <div class="classe collapsed" data-classe="Neuroscienze, Biomedicina e Movimento">
+        <h5>Neuroscienze, Biomedicina e Movimento</h5>
+        <ul>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Scienze motorie</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Scienze e tecniche delle attività motorie preventive e adattate</a></li>
+        </ul>
+      </div>
+
+      <div class="classe collapsed" data-classe="Scienze Chirurgiche, Odontostomatologiche e Materno-Infantili">
+        <h5>Scienze Chirurgiche, Odontostomatologiche e Materno-Infantili</h5>
+        <ul>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale a Ciclo Unico in Odontoiatria e protesi dentaria</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Tecniche ortopediche</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Tecniche della prevenzione nell'ambiente e nei luoghi di lavoro</a></li>
+        </ul>
+      </div>
+
+      <div class="classe collapsed" data-classe="Scienze Economiche">
+        <h5>Scienze Economiche</h5>
+        <ul>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Economia aziendale</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Economia e commercio</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Economia delle imprese e dei mercati internazionali</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Economics</a></li>
+        </ul>
+      </div>
+
+      <div class="classe collapsed" data-classe="Scienze Giuridiche">
+        <h5>Scienze Giuridiche</h5>
+        <span class="new-badge">Popolare</span>
+        <ul>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Scienze dei servizi giuridici</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Giurisprudenza</a></li>
+        </ul>
+      </div>
+
+      <div class="classe collapsed" data-classe="Scienze Umane">
+        <h5>Scienze Umane</h5>
+        <ul>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Filosofia</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Triennale in Scienze dell'educazione e della formazione</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Filosofia</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1"></i> Corso di Laurea Magistrale in Scienze pedagogiche</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+ <!-- Footer -->
+<footer class="bg-dark text-white pt-4 pb-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <h5 class="mb-3"><i class="fas fa-graduation-cap me-2"></i>Matricole Verona</h5>
+        <p>Risorse, informazioni e supporto per le nuove matricole dell'Università di Verona.</p>
+        <p>Unisciti alla nostra community di oltre 5.000 studenti!</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <h5 class="mb-3">Link Utili</h5>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none"><i class="fas fa-chevron-right me-2"></i>Home</a></li>
+          <li><a href="#" class="text-white text-decoration-none"><i class="fas fa-chevron-right me-2"></i>Dipartimenti</a></li>
+          <li><a href="#" class="text-white text-decoration-none"><i class="fas fa-chevron-right me-2"></i>FAQ</a></li>
+          <li><a href="#" class="text-white text-decoration-none"><i class="fas fa-chevron-right me-2"></i>Contatti</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4 mb-4">
+        <h5 class="mb-3">Contatti</h5>
+        <ul class="list-unstyled">
+          <li><i class="fas fa-envelope me-2"></i> info@matricoleverona.it</li>
+          <li><i class="fas fa-map-marker-alt me-2"></i> Verona, Italia</li>
+        </ul>
+        <div class="mt-3">
+          <a href="#" class="me-3 text-white fs-5"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="me-3 text-white fs-5"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="me-3 text-white fs-5"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="text-white fs-5"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    <hr class="my-3 bg-light">
+    <div class="text-center text-white-50 small">
+      &copy; 2024 Matricole Verona. Tutti i diritti riservati.
+    </div>
+  </div>
+</footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const gridContainer = document.getElementById('gridContainer');
+      const searchInput = document.getElementById('searchInput');
+      const didYouMean = document.getElementById('didYouMean');
+      const noResults = document.getElementById('noResults');
+      const classi = Array.from(document.querySelectorAll('.classe'));
+      
+      // Costruiamo l'indice di ricerca con Fuse.js
+      const searchData = [];
+      
+      classi.forEach(classe => {
+        // Aggiungiamo il dipartimento
+        const deptName = classe.dataset.classe;
+        searchData.push({
+          text: deptName,
+          element: classe,
+          type: 'department'
+        });
+        
+        // Aggiungiamo tutti i corsi di questo dipartimento
+        const courseLinks = classe.querySelectorAll('ul li a');
+        courseLinks.forEach(link => {
+          searchData.push({
+            text: link.textContent,
+            element: classe,
+            type: 'course'
+          });
+        });
+      });
+      
+      // Inizializziamo Fuse.js per la ricerca fuzzy
+      const fuse = new Fuse(searchData, {
+        keys: ['text'],
+        includeScore: true,
+        threshold: 0.4, // Regola la tolleranza agli errori (0=nessun errore, 1=tutti gli errori)
+        minMatchCharLength: 2, // Solo se almeno 2 caratteri
+        ignoreLocation: true, // Cerca in qualsiasi parte della stringa
+        includeMatches: true // Include i dettagli delle corrispondenze
+      });
+      
+      // Funzione per chiudere tutte le classi
+      function chiudiTutte() {
+        classi.forEach(c => {
+          c.classList.add('collapsed');
+          c.style.display = '';
+        });
+      }
+      
+      // Toggle apertura/chiusura al click sull'intestazione
+      classi.forEach(classe => {
+        classe.querySelector('h5').addEventListener('click', () => {
+          classe.classList.toggle('collapsed');
+        });
+      });
+      
+      // Ricerca con correzione degli errori
+      searchInput.addEventListener('input', () => {
+        const q = searchInput.value.trim().toLowerCase();
+        didYouMean.innerHTML = '';
+        noResults.style.display = 'none';
+        
+        if (q === '') {
+          chiudiTutte();
+          classi.forEach(classe => {
+            classe.style.display = '';
+            // Rimuovi evidenziazione
+            const highlights = classe.querySelectorAll('.highlight');
+            highlights.forEach(hl => {
+              const parent = hl.parentNode;
+              parent.replaceChild(document.createTextNode(hl.textContent), hl);
+              parent.normalize();
+            });
+          });
+          return;
+        }
+        
+        const results = fuse.search(q);
+        const departmentsToShow = new Set();
+        let bestMatch = null;
+        
+        // Se non ci sono risultati, mostriamo il suggerimento
+        if (results.length === 0) {
+          // Prova a trovare un suggerimento con una ricerca più tollerante
+          const suggestionSearch = fuse.search(q, { threshold: 0.6, limit: 1 });
+          if (suggestionSearch.length > 0) {
+            bestMatch = suggestionSearch[0].item.text;
+            didYouMean.innerHTML = `Forse cercavi: <a id="suggestedTerm">${bestMatch}</a>`;
+            
+            document.getElementById('suggestedTerm').addEventListener('click', () => {
+              searchInput.value = bestMatch;
+              searchInput.dispatchEvent(new Event('input'));
+            });
+          }
+          
+          // Nascondi tutto e mostra il messaggio "nessun risultato"
+          classi.forEach(classe => classe.style.display = 'none');
+          noResults.style.display = 'block';
+          return;
+        }
+        
+        // Processa i risultati
+        results.forEach(result => {
+          const item = result.item;
+          departmentsToShow.add(item.element);
+          
+          // Evidenzia le corrispondenze nel testo
+          if (result.matches && result.matches.length > 0) {
+            const match = result.matches[0];
+            let text = item.text;
+            let highlighted = '';
+            let lastIndex = 0;
+            
+            match.indices.forEach(([start, end]) => {
+              // Aggiungi la parte prima della corrispondenza
+              highlighted += text.substring(lastIndex, start);
+              // Aggiungi la parte evidenziata
+              highlighted += `<span class="highlight">${text.substring(start, end + 1)}</span>`;
+              lastIndex = end + 1;
+            });
+            
+            // Aggiungi la parte rimanente
+            highlighted += text.substring(lastIndex);
+            
+            // Aggiorna il testo con l'evidenziazione
+            if (item.type === 'department') {
+              // Per i dipartimenti aggiorna l'elemento h5
+              const h5 = item.element.querySelector('h5');
+              h5.innerHTML = highlighted;
+            } else {
+              // Per i corsi aggiorna il link
+              const links = item.element.querySelectorAll('ul li a');
+              links.forEach(link => {
+                if (link.textContent === item.text) {
+                  link.innerHTML = `<i class="fab fa-whatsapp me-1"></i> ${highlighted}`;
+                }
+              });
+            }
+          }
+        });
+        
+        // Nascondi tutti i dipartimenti
+        classi.forEach(classe => {
+          classe.style.display = 'none';
+        });
+        
+        // Mostra i dipartimenti con corrispondenze
+        departmentsToShow.forEach(element => {
+          element.style.display = '';
+          element.classList.remove('collapsed');
+        });
+      });
+      
+      // All'avvio chiudi tutti i dipartimenti
+      chiudiTutte();
+    });
+  </script>
+</body>
+</html>

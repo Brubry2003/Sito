@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dipartimenti & Facoltà Responsive</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap e Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+
+  <style>
+    /* Navbar stile Univr */
+    .navbar {
+      background-color: #004d99;
+    }
+    .navbar .navbar-brand,
+    .navbar .nav-link {
+      color: #fff;
+    }
+    .navbar .nav-link:hover {
+      color: #ffcc00;
+    }
+
+    /* Blocchi */
+    .classe {
+      border: 1px solid #dee2e6;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background-color: #f8f9fa;
+      transition: transform 0.3s;
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .classe:hover {
+      transform: translateY(-2px);
+    }
+
+    .classe h5 {
+      margin-bottom: 0.75rem;
+      font-size: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #222;
+    }
+
+    .classe h5 .fa-chevron-down {
+      transition: transform 0.3s ease;
+    }
+    .classe.collapsed h5 .fa-chevron-down {
+      transform: rotate(-90deg);
+    }
+
+    .classe ul {
+      margin-bottom: 0;
+      list-style-type: none;
+      padding-left: 1rem;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .classe.collapsed ul {
+      max-height: 0;
+      padding-left: 0;
+      margin: 0;
+    }
+    .classe:not(.collapsed) ul {
+      max-height: 1000px; /* abbastanza alto */
+    }
+    .classe ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Contenitore ricerca con margine */
+    .search-container {
+      position: relative;
+      margin: 1.5rem 0;
+    }
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      color: #666;
+    }
+
+    /* COLORI CASUALI */
+
+    .colore-1 {
+      background-color: #ffefef;
+      border-color: #d46a6a;
+    }
+    .colore-1 h5 {
+      color: #a92c2c;
+    }
+
+    .colore-2 {
+      background-color: #eaffef;
+      border-color: #4dbd4d;
+    }
+    .colore-2 h5 {
+      color: #276927;
+    }
+
+    .colore-3 {
+      background-color: #eff9ff;
+      border-color: #4899d8;
+    }
+    .colore-3 h5 {
+      color: #1f5c8a;
+    }
+
+    .colore-4 {
+      background-color: #fff7e6;
+      border-color: #d7a631;
+    }
+    .colore-4 h5 {
+      color: #7a5d1f;
+    }
+
+    .colore-5 {
+      background-color: #f3e6ff;
+      border-color: #944ddb;
+    }
+    .colore-5 h5 {
+      color: #502a7a;
+    }
+
+    .colore-6 {
+      background-color: #e6fff9;
+      border-color: #33ba8a;
+    }
+    .colore-6 h5 {
+      color: #1a6f4a;
+    }
+
+    /* Puoi aggiungere altri colori se vuoi */
+  </style>
+</head>
+<body>
+
+    <h1>GRUPPI WHATSAPP MATRICOLE</h1>
+    <h2>Università di verona</h2>
+    <h3>cerca il tuo dipartimento ed unisciti alla vita universitaria</h3>
+    <br>
+    
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="#">Matricole Verona</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"><i class="fas fa-bars" style="color:#fff"></i></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Dipartimenti</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Contatti</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Ricerca -->
+  <div class="container">
+    <div class="search-container">
+      <input type="text" id="searchInput" class="form-control" placeholder="Cerca dipartimento o facoltà..." autocomplete="off" />
+      <i class="fas fa-search search-icon"></i>
+    </div>
+
+    <div class="row" id="content">
+
+      <div class="col-12 col-md-6 col-lg-4 d-flex">
+        <div class="classe collapsed colore-1 flex-fill" data-classe="Biotecnologie">
+          <h5>Biotecnologie <i class="fas fa-chevron-down"></i></h5>
+          <ul>
+            <li><a href="#">Corso di Laurea Triennale in Biotecnologie</a></li>
+            <li><a href="#">Corso di Laurea Magistrale in Biotecnologie avanzate</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4 d-flex">
+        <div class="classe collapsed colore-2 flex-fill" data-classe="Culture e Civiltà">
+          <h5>Culture e Civiltà <i class="fas fa-chevron-down"></i></h5>
+          <ul>
+            <li><a href="#">Corso di Laurea Triennale in Beni culturali</a></li>
+            <li><a href="#">Corso di Laurea Triennale in Lettere</a></li>
+            <li><a href="#">Corso di Laurea Triennale in Scienze della comunicazione</a></li>
+            <li><a href="#">Corso di Laurea Magistrale in Editoria e Giornalismo</a></li>
+            <li><a href="#">Corso di Laurea Magistrale in Linguistics</a></li>
+            <li><a href="#">Corso di Laurea Magistrale in Storia delle Arti</a></li>
+            <li><a href="#">Corso di Laurea Magistrale in Quaternario, preistoria e archeologia</a></li>
+            <li><a href="#">Corso di Laurea Magistrale in Scienze storiche</a></li>
+            <li><a href="#">Corso di Laurea Magistrale in Tradizione e interpretazione dei testi letterari</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4 d-flex">
+        <div class="classe collapsed colore-3 flex-fill" data-classe="Diagnostica e Sanità Pubblica">
+          <h5>Diagnostica e Sanità Pubblica <i class="fas fa-chevron-down"></i></h5>
+          <ul>
+            <li><a href="#">Corso di Laurea Triennale in Tecniche ortopediche</a></li>
+            <li><a href="#">Corso di Laurea Triennale in Tecniche della prevenzione nell'ambiente e nei luoghi di lavoro</a></li>
+            <li><a href="#">Corso di Laurea Magistrale in Tecniche avanzate in ortopedia e traumatologia</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4 d-flex">
+        <div class="classe collapsed colore-4 flex-fill" data-classe="Informatica">
+          <h5>Informatica <i class="fas fa-chevron-down"></i></h5>
+          <ul>
+            <li><a href="#">Corso di Laurea Triennale in Informatica</a></li>
+            <li><a href="#">Corso di Laurea Triennale in Bioinformatica</a></li>
+            <li><a href="#">Corso di Laurea Magistrale in Informatica</a></li>
+            <li><a href="#">Corso di Laurea Magistrale in Bioinformatica</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4 d-flex">
+        <div class="classe collapsed colore-5 flex-fill" data-classe="Ingegneria per la Medicina di Innovazione">
+          <h5>Ingegneria per la Medicina di Innovazione <i class="fas fa-chevron-down"></i></h5>
+          <ul>
+            <li><a href="#">Corso di Laurea Triennale in Ingegneria dei sistemi robotici e intelligenti</a></li>
+            <li><a href="#">Corso di Laurea Magistrale in Ingegneria dei sistemi medicali per la persona</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4 d-flex">
+        <div class="classe collapsed colore-6 flex-fill" data-classe="Lingue e Letterature Straniere">
+          <h5>Lingue e Letterature Straniere <i class="fas fa-chevron-down"></i></h5>
+          <ul>
+            <li><a href="#">Corso di Laurea Triennale in Lingue e letterature straniere</a></li>
+            <li><a href="#">Corso di Laurea Magistrale in Lingue e letterature straniere</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- aggiungi altri blocchi come vuoi, usando classi colore-1..6 oppure definendone di nuove -->
+
+    </div>
+  </div>
+
+  <script>
+    // Toggle collapsible e icona
+    document.querySelectorAll('.classe').forEach(classe => {
+      classe.addEventListener('click', () => {
+        classe.classList.toggle('collapsed');
+      });
+    });
+
+    // Ricerca e reset
+    const searchInput = document.getElementById('searchInput');
+    const classi = document.querySelectorAll('.classe');
+
+    searchInput.addEventListener('input', () => {
+      const filter = searchInput.value.toLowerCase();
+
+      if (filter === '') {
+        // reset: mostra tutti e collapse tutti
+        classi.forEach(classe => {
+          classe.parentElement.style.display = '';
+          if (!classe.classList.contains('collapsed')) {
+            classe.classList.add('collapsed');
+          }
+        });
+      } else {
+        classi.forEach(classe => {
+          const text = classe.getAttribute('data-classe').toLowerCase();
+          if (text.includes(filter)) {
+            classe.parentElement.style.display = '';
+            classe.classList.remove('collapsed'); // apri visibili
+          } else {
+            classe.parentElement.style.display = 'none';
+          }
+        });
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
