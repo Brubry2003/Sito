@@ -10,67 +10,181 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
   
   <style>
-    /* Navbar */
-    .navbar {
-      background-color: #004d99;
+    body {
+      background: #f5f6fa;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #1d2731;
     }
-    .navbar .navbar-brand,
+    .navbar {
+      background: #1d2731;
+      border-bottom: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      min-height: 32px;
+      padding-top: 0;
+      padding-bottom: 0;
+      padding-left: 0;
+      padding-right: 0;
+      width: 100%;
+      max-width: 100vw;
+      margin: 0;
+      height: 49px;
+    }
+    .navbar .navbar-brand {
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-size: 1.08rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding-left: 0.2rem;
+      margin-left: 0.5rem;
+    }
+    .navbar .lang-flags {
+      display: flex;
+      align-items: center;
+      gap: 0.12rem;
+      margin: 0;
+      padding-left: 0.5rem;
+    }
+    .navbar .lang-flag {
+      width: 22px;
+      height: 14px;
+      border-radius: 0;
+      object-fit: cover;
+      background: #fff;
+      margin-right: 0.04rem;
+      transition: box-shadow 0.2s, border 0.2s;
+      cursor: pointer;
+      box-shadow: none;
+      border: none;
+      padding: 0;
+    }
+    .navbar .lang-flag:hover {
+      outline: 2px solid #ffd700;
+      outline-offset: 1px;
+    }
+    .navbar .navbar-brand {
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-size: 1.25rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding-left: 0.2rem;
+    }
     .navbar .nav-link {
       color: #fff;
+      font-weight: 400;
+      letter-spacing: 0.2px;
+      font-size: 0.98rem;
+      margin-left: 0.18rem;
+      margin-right: 0.18rem;
+      border-radius: 0.3rem;
+      padding: 0.3rem 0.45rem;
+      transition: background 0.2s, color 0.2s;
     }
-    .navbar .nav-link:hover {
-      color: #ffcc00;
+    .navbar .nav-link:hover, .navbar .nav-link.active {
+      color: #ffd700;
+      background: #223142;
+      text-shadow: none;
     }
-
-    /* Container griglia 3 colonne */
+    .navbar-toggler {
+      border: none;
+      background: transparent;
+    }
+    .navbar-toggler-icon {
+      color: #fff;
+      font-size: 1.3rem;
+    }
+    @media (max-width: 991.98px) {
+      .navbar .navbar-nav .nav-link {
+        margin-left: 0;
+        margin-right: 0;
+        padding: 0.7rem 1rem;
+      }
+      .navbar-nav.flex-row {
+        flex-direction: column !important;
+        gap: 0 !important;
+      }
+      .vr-sep {
+        display: none;
+      }
+    }
+    h1, h2, h3 {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: 700;
+      color: #1d2731;
+      margin-bottom: 0.3rem;
+    }
+    h1 {
+      font-size: 1.3rem;
+      color: #1d2731;
+      margin-top: 1.2rem;
+    }
+    h2 {
+      font-size: 1.05rem;
+      color: #1d2731;
+    }
+    h3 {
+      font-size: 0.95rem;
+      color: #1d2731;
+    }
     .grid-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2.5rem;
     }
-
-    /* Card dipartimenti */
     .classe {
-      border: 1px solid #dee2e6;
-      border-radius: .5rem;
-      padding: 1rem;
-      background-color: #f8f9fa;
+      border: 1.5px solid #e3e6ed;
+      border-radius: 0.7rem;
+      background: #fff;
+      box-shadow: 0 2px 12px 0 rgba(0, 82, 163, 0.07);
+      transition: box-shadow .25s, border-color .25s, transform .2s;
+      padding: 0.7rem 1rem 0.7rem 1rem;
       position: relative;
       cursor: pointer;
-      user-select: none;
-      transition: transform .3s;
+      min-height: 80px;
+      overflow: hidden;
+      color: #1d2731;
+      font-size: 0.97rem;
     }
-
-    /* si espande e occupa due colonne (2/3 della riga se 3 colonne) */
+    .classe:hover {
+      border-color: #0052a3;
+      box-shadow: 0 8px 32px 0 #0052a31a;
+      transform: translateY(-2px) scale(1.01);
+    }
     .classe.expanded {
       grid-column: span 2;
       z-index: 2;
+      border-color: #0077c2;
+      box-shadow: 0 12px 40px 0 #0052a32a;
+      transform: scale(1.01);
     }
-
-    /* Responsive fix: su schermi piccoli la card espansa occupa tutta la riga */
     @media (max-width: 767.98px) {
       .grid-container {
         grid-template-columns: 1fr;
+        gap: 1.1rem;
       }
       .classe.expanded {
         grid-column: 1 / -1;
       }
+      .classe {
+        padding: 1rem 0.7rem 0.7rem 0.7rem;
+      }
     }
-
-    .classe:hover {
-      transform: translateY(-2px);
-    }
-
-    /* Titolo con freccetta */
     .classe h5 {
-      margin-bottom: 0.75rem;
-      font-size: 1.25rem;
-      padding-right: 30px;
+      font-size: 1.01rem;
+      color: #1d2731;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      padding-right: 28px;
       position: relative;
+      letter-spacing: 0.1px;
     }
     .classe h5::after {
-      content: "\f078"; /* freccia giù FontAwesome */
+      content: "\f078";
       font-family: "Font Awesome 6 Free";
       font-weight: 900;
       position: absolute;
@@ -79,38 +193,134 @@
       transform: translateY(-50%);
       transition: transform 0.3s ease;
       pointer-events: none;
+      color: #0077c2;
+      font-size: 1.1rem;
+      opacity: 0.85;
     }
-    /* Ruota freccia se aperto */
     .classe:not(.collapsed) h5::after {
       transform: translateY(-50%) rotate(-90deg);
+      color: #0052a3;
     }
-
-    /* Lista corsi nascosta di default */
     .classe ul {
       list-style: none;
-      padding-left: 20px;
+      padding-left: 12px;
       margin-bottom: 0;
       display: none;
+      margin-top: 0.2rem;
     }
     .classe:not(.collapsed) ul {
       display: block;
+      animation: fadeIn 0.3s;
     }
     .classe ul li {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.18rem;
+      font-size: 0.93rem;
+      color: #1d2731;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      position: relative;
+      padding-left: 0.2rem;
     }
-
-    /* Ricerca */
+    .classe ul li a {
+      color: #1d2731;
+      text-decoration: none;
+      border-radius: 0.2rem;
+      padding: 1px 4px;
+      transition: background 0.2s, color 0.2s;
+      font-weight: 500;
+      font-size: 0.93rem;
+      display: inline-block;
+    }
+    .classe ul li a:hover {
+      background: #e3f0fa;
+      color: #0052a3;
+      text-decoration: underline;
+    }
     .search-container {
       position: relative;
-      margin: 1.5rem 0;
+      margin: 1.5rem 0 2.5rem 0;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .search-icon {
       position: absolute;
       top: 50%;
       right: 15px;
       transform: translateY(-50%);
-      color: #666;
+      color: #0077c2;
       pointer-events: none;
+      font-size: 1.2rem;
+    }
+    #searchInput {
+      border-radius: 2rem;
+      padding-left: 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1.5px solid #0077c2;
+      transition: border-color 0.2s;
+    }
+    #searchInput:focus {
+      border-color: #0052a3;
+      box-shadow: 0 2px 12px #0077c233;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    footer {
+      background: #1d2731;
+      border-top: 2px solid #0052a3;
+      color: #fff;
+      padding: 2.5rem 0 1.5rem 0;
+      margin-top: 3rem;
+      box-shadow: 0 -2px 12px #0001;
+    }
+    footer h5 {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+    footer a {
+      color: #e3f0fa;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer a:hover {
+      color: #ffd700;
+      text-decoration: underline;
+    }
+    footer hr {
+      border-color: #e3e6ed;
+    }
+    .vr-sep {
+      display: inline-block;
+      width: 1.5px;
+      height: 49px;
+      background: #fff8;
+      margin: 0 0.7rem 0 0.5rem;
+      border-radius: 1px;
+      vertical-align: middle;
+      position: relative;
+      top: 0;
+      align-self: stretch;
+      min-height: 49px;
+    }
+    @media (max-width: 991.98px) {
+      .navbar-nav.flex-row {
+        flex-direction: column !important;
+        gap: 0 !important;
+      }
+      .vr-sep {
+        display: none;
+      }
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 1.3rem; }
+      h2 { font-size: 1.05rem; }
+      h3 { font-size: 0.95rem; }
+      .classe { padding: 0.8rem 0.7rem; }
+      .grid-container { gap: 0.7rem; }
+      .search-container { margin-bottom: 1.2rem; }
     }
   </style>
 </head>
@@ -118,21 +328,48 @@
 
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container">
-      <a class="navbar-brand" href="#">Matricole Verona</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-        <span class="navbar-toggler-icon"><i class="fas fa-bars" style="color:#fff"></i></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav ms-auto">
-                   <!-- Navbar contenuto -->
-        </ul>
+  <nav class="navbar navbar-expand-lg" style="padding-left:0;padding-right:0; width:100vw; left:0; right:0; position:fixed; top:0; z-index:1050;">
+    <div class="container-fluid p-0 m-0" style="height:49px; min-width:0;">
+      <div class="d-flex w-100 align-items-center flex-wrap" style="min-width:0; height:49px;">
+        <div class="d-flex align-items-center" style="flex-shrink:0;">
+          <div class="lang-flags" style="flex-shrink:0;">
+            <img src="https://flagcdn.com/gb.svg" alt="English" class="lang-flag" title="English">
+            <img src="https://flagcdn.com/it.svg" alt="Italiano" class="lang-flag" title="Italiano">
+            <img src="https://flagcdn.com/fr.svg" alt="Français" class="lang-flag" title="Français">
+            <img src="https://flagcdn.com/de.svg" alt="Deutsch" class="lang-flag" title="Deutsch">
+            <img src="https://flagcdn.com/cn.svg" alt="中文" class="lang-flag" title="Cinese">
+            <img src="https://flagcdn.com/ru.svg" alt="Русский" class="lang-flag" title="Russo">
+            <span class="vr-sep"></span>
+          </div>
+          <div class="d-none d-lg-flex align-items-center" style="height:49px;">
+            <ul class="navbar-nav flex-row gap-2" style="height:49px; align-items:center;">
+              <li class="nav-item"><a class="nav-link" href="#">Ateneo</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Dipartimenti e Facoltà</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Scuola di dottorato</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Biblioteche</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Organizzazione</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Centri di Ateneo</a></li>
+            </ul>
+          </div>
+        </div>
+        <button class="navbar-toggler ms-2 d-lg-none ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation" style="margin-right:0.5rem;">
+          <span class="navbar-toggler-icon"><i class="fas fa-bars" style="color:#fff"></i></span>
+        </button>
+        <div class="collapse navbar-collapse w-100" id="navMenu" style="height:auto;">
+          <ul class="navbar-nav flex-column d-lg-none bg-dark w-100 mt-2" style="border-radius:0.5rem;">
+            <li class="nav-item"><a class="nav-link" href="#">Ateneo</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Dipartimenti e Facoltà</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Scuola di dottorato</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Biblioteche</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Organizzazione</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Centri di Ateneo</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </nav>
 
-      <div class="container mt-4">
+      <div class="container mt-4" style="padding-top:65px;">
       <div class="text-center">
         <h1>GRUPPI WHATSAPP MATRICOLE</h1>
         <h2>Università di Verona</h2>
