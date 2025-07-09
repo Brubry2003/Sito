@@ -1,0 +1,215 @@
+/* Stili principali per elenco3.html */
+
+/* Navbar */
+.navbar {
+  background-color: #004d99;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.navbar .navbar-brand,
+.navbar .nav-link {
+  color: #fff;
+  font-weight: 500;
+}
+.navbar .nav-link:hover {
+  color: #ffcc00;
+}
+
+/* Hero Section */
+.hero {
+  padding: 4rem 0;
+  margin-bottom: 3rem;
+}
+.hero h1 {
+  font-weight: 700;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+.hero h2 {
+  font-weight: 400;
+  font-size: 1.8rem;
+}
+.hero h3 {
+  font-weight: 300;
+  font-size: 1.3rem;
+}
+
+/* Container griglia 3 colonne */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Card dipartimenti */
+.classe {
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 1.5rem;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+.classe.expanded {
+  grid-column: 1 / -1;
+}
+.classe:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  border-color: #004d99;
+}
+
+/* Titolo con freccetta */
+.classe h5 {
+  margin-bottom: 0.75rem;
+  font-size: 1.3rem;
+  padding-right: 30px;
+  position: relative;
+  color: #004d99;
+  font-weight: 600;
+}
+.classe h5::after {
+  content: "\f078";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.3s ease;
+  pointer-events: none;
+  color: #666;
+}
+.classe:not(.collapsed) h5::after {
+  transform: translateY(-50%) rotate(-90deg);
+  color: #004d99;
+}
+
+/* Lista corsi nascosta di default */
+.classe ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 1rem;
+  margin-bottom: 0;
+  display: none;
+}
+.classe:not(.collapsed) ul {
+  display: block;
+}
+.classe ul li {
+  margin-bottom: 0.7rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+.classe ul li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #004d99;
+  font-size: 1.2rem;
+  top: -0.1rem;
+}
+.classe ul li a {
+  text-decoration: none;
+  color: #333;
+  transition: color 0.2s;
+  display: block;
+  padding: 0.2rem 0;
+}
+.classe ul li a:hover {
+  color: #004d99;
+  text-decoration: underline;
+}
+
+/* Badge per nuovo */
+.new-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #ff6b6b;
+  color: white;
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+/* Ricerca */
+.search-container {
+  position: relative;
+  margin: 2rem 0;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.search-icon {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  color: #666;
+  pointer-events: none;
+}
+#searchInput {
+  padding: 12px 20px;
+  border-radius: 50px;
+  border: 2px solid #ddd;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+}
+#searchInput:focus {
+  border-color: #004d99;
+  box-shadow: 0 0 0 0.25rem rgba(0, 77, 153, 0.25);
+}
+
+/* Did you mean */
+.did-you-mean {
+  text-align: center;
+  margin-top: 10px;
+  color: #666;
+  font-style: italic;
+}
+.did-you-mean a {
+  color: #004d99;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+.did-you-mean a:hover {
+  text-decoration: underline;
+}
+
+/* Messaggio nessun risultato */
+.no-results {
+  text-align: center;
+  padding: 3rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin: 2rem 0;
+  display: none;
+}
+.no-results i {
+  font-size: 3rem;
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+
+/* Animazioni */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* Highlight dei termini trovati */
+.highlight {
+  background-color: #fff9c4;
+  padding: 0 3px;
+  border-radius: 3px;
+}
