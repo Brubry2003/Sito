@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dipartimenti & Facoltà</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background: #f5f6fa;
+      min-height: 100vh;
+      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+      color: #1d2731;
+    }
+    .navbar {
+      background: #1d2731;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      height: 49px;
+      width: 100%;
+      max-width: 100vw;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar .navbar-brand {
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.25rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding-left: 0.2rem;
+    }
+    .navbar .lang-flags {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem; /* più spazio tra le bandiere */
+      padding-left: 0.5rem;
+    }
+    .navbar .lang-flag {
+      width: 32px;
+      height: 20px;
+      object-fit: cover;
+      background: #fff;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      transition: box-shadow 0.2s, border 0.2s, transform 0.18s;
+    }
+    .navbar .lang-flag:hover {
+      outline: 2px solid #ffd700;
+      outline-offset: 1px;
+      transform: scale(1.18);
+      z-index: 2;
+    }
+    .navbar .nav-link {
+      color: #fff;
+      font-weight: 400;
+      font-size: 0.98rem;
+      border-radius: 0.3rem;
+      padding: 0.3rem 0.45rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .navbar .nav-link:hover, .navbar .nav-link.active {
+      color: #ffd700;
+      background: #223142;
+    }
+    .navbar-toggler {
+      border: none;
+      background: transparent;
+    }
+    .navbar-toggler-icon {
+      color: #fff;
+      font-size: 1.3rem;
+    }
+    @media (max-width: 991.98px) {
+      .navbar .navbar-nav .nav-link {
+        padding: 0.7rem 1rem;
+      }
+      .navbar-nav.flex-row {
+        flex-direction: column !important;
+        gap: 0 !important;
+      }
+      .vr-sep {
+        display: none;
+      }
+    }
+    h1, h2, h3 {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: 700;
+      color: #1d2731;
+      margin-bottom: 0.3rem;
+    }
+    h1 { font-size: 1.3rem; margin-top: 1.2rem; }
+    h2 { font-size: 1.05rem; }
+    h3 { font-size: 0.95rem; }
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+    .classe {
+      border: 1.5px solid #e3e6ed;
+      border-radius: 0.7rem;
+      background: #fff;
+      box-shadow: 0 2px 12px 0 rgba(0, 82, 163, 0.07);
+      transition: box-shadow .25s, border-color .25s, transform .2s, max-height 0.4s cubic-bezier(.4,0,.2,1), padding 0.4s cubic-bezier(.4,0,.2,1);
+      max-height: 70px;
+      overflow: hidden;
+      padding: 0.7rem 1rem 0.7rem 1rem;
+      position: relative;
+      cursor: pointer;
+      min-height: 80px;
+      color: #fff; /* testo bianco di default */
+      font-size: 0.97rem;
+      /* Il colore di sfondo sarà sovrascritto via JS per ogni classe */
+    }
+    .classe:hover {
+      border-color: #0052a3;
+      box-shadow: 0 8px 32px 0 #0052a31a;
+      transform: translateY(-2px) scale(1.01);
+    }
+    .classe.expanded {
+      grid-column: auto;
+      z-index: 2;
+      border-color: #0077c2;
+      box-shadow: 0 12px 40px 0 #0052a32a;
+      transform: scale(1.01);
+      max-height: 1200px; /* aumentato per mostrare tutte le voci */
+      padding-bottom: 1.5rem;
+    }
+    /* Rendi la classe Medicina più larga su desktop */
+    .classe[data-classe="Medicina"] {
+      /* grid-column: span 2; */ /* RIMUOVI questa regola per uniformare Medicina alle altre */
+    }
+    @media (max-width: 1200px) {
+      .classe[data-classe="Medicina"] {
+        /* grid-column: span 1; */ /* RIMUOVI questa regola */
+      }
+    }
+    @media (max-width: 767.98px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+        gap: 1.1rem;
+      }
+      .classe.expanded {
+        grid-column: 1 / -1;
+      }
+      .classe {
+        padding: 1rem 0.7rem 0.7rem 0.7rem;
+      }
+      .classe[data-classe="Medicina"] {
+        /* grid-column: span 1; */ /* RIMUOVI questa regola */
+      }
+    }
+    .classe h5 {
+      font-size: 1.01rem;
+      color: #fff;
+      font-weight: 900;
+      margin-bottom: 1.1rem;
+      padding-right: 28px;
+      position: relative;
+      letter-spacing: 0.1px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.2rem;
+      z-index: 1;
+      text-transform: uppercase;
+      justify-content: flex-start;
+      transition: all 0.25s cubic-bezier(.4,0,.2,1);
+      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    }
+    .classe.collapsed h5 {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      padding-right: 0;
+      margin-bottom: 0;
+      font-size: 1.22rem;
+      font-weight: 900;
+      letter-spacing: 0.09em;
+      min-height: 56px;
+      flex-direction: column;
+      /* Copri tutta la cella */
+      position: absolute;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: transparent;
+      display: flex;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .classe.collapsed h5 .dip-label {
+      font-size: 1.02rem;
+      font-weight: 900;
+      opacity: 0.95;
+      letter-spacing: 0.09em;
+      margin-bottom: 0.1em;
+    }
+    .classe.collapsed h5 .dip-name {
+      font-size: 1.18rem;
+      font-weight: 900;
+      letter-spacing: 0.13em;
+      margin-bottom: 0;
+      line-height: 1.1;
+    }
+    .classe.expanded h5 {
+      justify-content: flex-start;
+      align-items: flex-start;
+      text-align: left;
+      width: auto;
+      position: relative;
+      background: none;
+      pointer-events: auto;
+      z-index: 1;
+      margin-bottom: 1.1rem;
+      font-size: 1.01rem;
+      font-weight: 900;
+      min-height: unset;
+      flex-direction: column;
+    }
+    .classe.expanded h5 .dip-label {
+      font-size: 0.98rem;
+      font-weight: 900;
+      opacity: 0.85;
+      margin-bottom: 0.05em;
+      letter-spacing: 0.07em;
+    }
+    .classe.expanded h5 .dip-name {
+      font-size: 1.01rem;
+      font-weight: 900;
+      letter-spacing: 0.09em;
+      margin-bottom: 0;
+      line-height: 1.1;
+    }
+    .classe h5::after {
+      content: "\f078";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: transform 0.3s ease;
+      pointer-events: none;
+      color: #fff; /* freccia bianca di default */
+      font-size: 1.1rem;
+      opacity: 0.85;
+    }
+    .classe:not(.collapsed) h5::after {
+      color: #fff; /* freccia bianca anche quando espansa */
+    }
+    .classe ul {
+      list-style: none;
+      padding-left: 12px;
+      margin-bottom: 0;
+      display: none;
+      margin-top: 0.2rem;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s;
+    }
+    .classe:not(.collapsed) ul {
+      display: block;
+      max-height: 1200px; /* aumentato per mostrare tutte le voci */
+      opacity: 1;
+      animation: fadeIn 0.3s;
+    }
+    .classe ul li {
+      margin-bottom: 0.18rem;
+      font-size: 0.93rem;
+      color: #fff; /* testo bianco nelle liste */
+      font-family: 'Segoe UI', Arial, sans-serif;
+      position: relative;
+      padding-left: 0.2rem;
+    }
+    .classe ul li a {
+      color: #fff; /* link bianco di default */
+      text-decoration: none;
+      border-radius: 0.2rem;
+      padding: 1px 4px;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      font-weight: 500;
+      font-size: 0.93rem;
+      display: inline-block;
+    }
+    .classe ul li a:hover {
+      color: #ffd700 !important;
+      background: none !important;
+      transform: scale(1.08);
+      text-decoration: underline;
+    }
+    .search-link {
+      color: #1d2731;
+      text-decoration: none;
+      border-radius: 0.2rem;
+      padding: 1px 4px;
+      transition: background 0.2s, color 0.2s;
+      font-weight: 500;
+      font-size: 0.93rem;
+      display: inline-block;
+    }
+    .search-link:hover {
+      background: none !important;
+      color: #0052a3 !important;
+      /* niente transform */
+      text-decoration: underline;
+    }
+    .search-container {
+      position: relative;
+      margin: 1.5rem 0 2.5rem 0;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      color: #0077c2;
+      pointer-events: none;
+      font-size: 1.2rem;
+    }
+    #searchInput {
+      border-radius: 2rem;
+      padding-left: 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1.5px solid #0077c2;
+      transition: border-color 0.2s;
+    }
+    #searchInput:focus {
+      border-color: #0052a3;
+      box-shadow: 0 2px 12px #0077c233;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    footer {
+      background: #1d2731;
+      border-top: 2px solid #0052a3;
+      color: #fff;
+      padding: 2.5rem 0 1.5rem 0;
+      margin-top: 3rem;
+      box-shadow: 0 -2px 12px #0001;
+    }
+    footer h5 {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+    footer a {
+      color: #e3f0fa;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer a:hover {
+      color: #ffd700;
+      text-decoration: underline;
+    }
+    footer hr {
+      border-color: #e3e6ed;
+    }
+    .vr-sep {
+      display: inline-block;
+      width: 1.5px;
+      height: 49px;
+      background: #fff8;
+      margin: 0 0.7rem 0 0.5rem;
+      border-radius: 1px;
+      vertical-align: middle;
+      position: relative;
+      top: 0;
+      align-self: stretch;
+      min-height: 49px;
+    }
+    @media (max-width: 991.98px) {
+      .navbar-nav.flex-row {
+        flex-direction: column !important;
+        gap: 0 !important;
+      }
+      /* .vr-sep {
+        display: none;
+      } */
+      /* RIMOSSO: la barra resta visibile anche su mobile */
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 1.3rem; }
+      h2 { font-size: 1.05rem; }
+      h3 { font-size: 0.95rem; }
+      .classe { padding: 0.8rem 0.7rem; }
+      .grid-container { gap: 0.7rem; }
+      .search-container { margin-bottom: 1.2rem; }
+    }
+    /* Rimuovi le icone di sfondo e in h5 dalle classi */
+    .classe .classe-bg-icon,
+    .classe h5 .classe-h5-icon {
+      display: none !important;
+    }
+    /* Animazione di comparsa */
+    @keyframes popIn {
+      0% { transform: scale(0.7); opacity: 0; }
+      80% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    .animated-hero {
+      animation: fadeIn 0.7s cubic-bezier(.4,0,.2,1);
+    }
+    .hero-fullwidth {
+      background: linear-gradient(90deg, #383838 0%, #223142 100%);
+      box-shadow: 0 8px 32px 0 rgba(60, 80, 180, 0.10);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 0;
+    }
+    @media (max-width: 767.98px) {
+      .hero-fullwidth {
+        min-height: 180px;
+        padding-top: 60px;
+        padding-bottom: 18px;
+      }
+      .hero-fullwidth h1 { font-size: 1.3rem !important; }
+      .hero-fullwidth h2 { font-size: 1.05rem !important; }
+      .hero-fullwidth h3 { font-size: 0.95rem !important; }
+    }
+    /* Eccezioni per Management e Culture e Civiltà: testo nero */
+    .classe[data-classe="Management"],
+    .classe[data-classe="Management"] h5,
+    .classe[data-classe="Management"] h5::after,
+    .classe[data-classe="Management"] ul li,
+    .classe[data-classe="Management"] ul li a,
+    .classe[data-classe="Culture e Civiltà"],
+    .classe[data-classe="Culture e Civiltà"] h5,
+    .classe[data-classe="Culture e Civiltà"] h5::after,
+    .classe[data-classe="Culture e Civiltà"] ul li,
+    .classe[data-classe="Culture e Civiltà"] ul li a {
+      color: #1d2731 !important;
+    }
+    /* Marquee effect for disclaimer */
+    #marquee-disclaimer {
+      overflow: hidden;
+      position: absolute;
+      left: 0; top: 0; right: 0; bottom: 0;
+      width: 100%;
+      height: 49px;
+      pointer-events: none;
+    }
+    #marquee-disclaimer span {
+      display: inline-block;
+      min-width: 100vw;
+      animation: marquee-move 9s linear infinite;
+    }
+    @media (min-width: 768px) {
+      #marquee-disclaimer span {
+        animation-duration: 15s;
+      }
+    }
+    @keyframes marquee-move {
+      0%   { transform: translateX(100vw); }
+      100% { transform: translateX(-100%); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg" style="width:100vw; position:fixed; top:0; z-index:1050; background:#223142 !important; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+    <div class="container-fluid p-0 m-0" style="height:49px;">
+      <div class="d-flex w-100 align-items-center flex-wrap" style="height:49px;">
+        <div class="d-flex align-items-center">
+          <div class="lang-flags">
+            <img src="https://flagcdn.com/gb.svg" alt="English" class="lang-flag" title="English" id="flag-en">
+            <img src="https://flagcdn.com/it.svg" alt="Italiano" class="lang-flag" title="Italiano">
+            <span class="vr-sep"></span>
+          </div>
+        </div>
+        <!-- Marquee Disclaimer RIMOSSO -->
+      </div>
+    </div>
+  </nav>
+
+  <div class="hero-fullwidth w-100 d-flex align-items-center justify-content-center" style="min-height: 180px; padding-top: 65px; padding-bottom: 30px; background:#383838;">
+     <img src="verona.png" alt="citta di verona" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0.1; z-index:-1;">
+    <div class="w-100 text-center">
+      <h1 style="font-size:2rem; font-weight:800; letter-spacing:0.5px; color:#fff; margin-bottom:0.7rem;">
+        GRUPPI WHATSAPP MATRICOLE UNIVR
+      </h1>
+
+      <h3 style="font-size:1.05rem; color:#bfc8e6; font-weight:400; margin-bottom:0;">
+        Cerca il tuo corso di triennale o magistrale ed entra nella community universitaria!
+      </h3>
+    </div>
+  </div>
+
+  <!-- Ricerca -->
+  <div class="container">
+    <div class="search-container">
+      <input type="text" id="searchInput" class="form-control" placeholder="Cerca dipartimento o facoltà..." />
+      <i class="fas fa-search search-icon"></i>
+    </div>
+    <div id="searchResults" style="display:none; margin-bottom:2rem; min-height:250px;"></div>
+    <div class="grid-container" id="gridContainer">
+
+<div class="classe collapsed" data-classe="Management">
+  <h5>
+    <span class="dip-label">DIPARTIMENTO DI</span>
+    <span class="dip-name">MANAGEMENT</span>
+  </h5>
+  <ul>
+    <li><a href="#">• Laurea in Economia aziendale e management</a></li>
+    <li><a href="#">• Laurea in Economia e innovazione aziendale</a></li>
+    <li><a href="#">• Laurea magistrale in Governance e amministrazione d'impresa</a></li>
+    <li><a href="#">• Laurea magistrale in Management e strategia d'impresa</a></li>
+    <li><a href="#">• Laurea magistrale in Marketing e comunicazione d'impresa</a></li>
+    <li><a href="#">• Laurea magistrale interateneo in Viticulture, enology and wine marketing</a></li>
+    <li><a href="#">• Laurea magistrale Management delle attività sportive innovative e sostenibili</a></li>
+    <li><a href="#">• Laurea magistrale in Supply Chain Management</a></li>
+  </ul>
+</div>
+
+<div class="classe collapsed" data-classe="Scienze Economiche">
+  <h5>
+    <span class="dip-label">DIPARTIMENTO DI</span>
+    <span class="dip-name">SCIENZE ECONOMICHE</span>
+  </h5>
+  <ul>
+    <li><a href="#">• Laurea in Economia e commercio</a></li>
+    <li><a href="#">• Laurea in Economia, imprese e mercati Internazionali</a></li>
+    <li><a href="#">• Laurea magistrale in Banca e finanza</a></li>
+    <li><a href="#">• Laurea magistrale in Economics and data analysis</a></li>
+    <li><a href="#">• Laurea magistrale in International economics and business</a></li>
+  </ul>
+</div>
+
+<div class="classe collapsed" data-classe="Scienze Giuridiche">
+  <h5>
+    <span class="dip-label">DIPARTIMENTO DI</span>
+    <span class="dip-name">SCIENZE GIURIDICHE</span>
+  </h5>
+  <ul>
+    <li><a href="#">• Laurea in Servizi giuridici per imprese, amministrazioni e no profit</a></li>
+    <li><a href="#">• Laurea magistrale a ciclo unico in Giurisprudenza</a></li>
+    <li><a href="#">• Laurea magistrale in Governance dell’emergenza</a></li>
+    <li><a href="#">• Laurea magistrale in Diritto per le tecnologie e l'innovazione sostenibile</a></li>
+  </ul>
+</div>
+
+<div class="classe collapsed" data-classe="Scienze Umane">
+  <h5>
+    <span class="dip-label">DIPARTIMENTO DI</span>
+    <span class="dip-name">SCIENZE UMANE</span>
+  </h5>
+  <ul>
+    <li><a href="#">• Laurea in Filosofia</a></li>
+    <li><a href="#">• Laurea in Scienze dell’educazione</a></li>
+    <li><a href="#">• Laurea in Scienze del servizio sociale</a></li>
+    <li><a href="#">• Laurea in Scienze pscicologiche per la formaizone</a></li>
+    <li><a href="#">• Laurea in Studi Strategici per la sicurezza e le politiche internazionali</a></li>
+    <li><a href="#">• Laurea in Psicologia per la formazione</a></li>
+    <li><a href="#">• Laurea magistrale in Pscicologia per la formazione</a></li>
+    <li><a href="#">• Laurea magistrale in Scienze Filosofiche</a></li>
+    <li><a href="#">• Laurea magistrale in Scienze pedagogiche</a></li>
+    <li><a href="#">• Laurea magistrale in Servizio sociale in ambiti complessi</a></li>
+  </ul>
+</div>
+
+<div class="classe collapsed" data-classe="Biotecnologie">
+  <h5>
+    <span class="dip-label">DIPARTIMENTO DI</span>
+    <span class="dip-name">BIOTECNOLOGIE</span>
+  </h5>
+  <ul>
+    <li><a href="#">• Laurea in Biotecnologie</a></li>
+    <li><a href="#">• Laurea in Innovazione e sostenibilità nella produzione industriale di alimenti</a></li>
+    <li><a href="#">• Laurea in Scienze e tecnologie viticole ed enologiche</a></li>
+    <li><a href="#">• Laurea magistrale in Biotecnologie agro-alimentari</a></li>
+    <li><a href="#">• Laurea magistrale in Biotecnologie per le biorisorse e lo sviluppo ecosostenibile</a></li>
+    <li><a href="#">• Laurea magistrale in Molecular and medical biotechnology</a></li>
+    <li><a href="#">• Laurea magistrale interateneo in Viticoltura, enologia e mercati vitivinicoli</a></li>
+  </ul>
+</div>
+
+<div class="classe collapsed" data-classe="Culture e Civiltà">
+  <h5>
+    <span class="dip-label">DIPARTIMENTO DI</span>
+    <span class="dip-name">CULTURE E CIVILTÀ</span>
+  </h5>
+  <ul>
+    <li><a href="#">• Beni culturali</a></li>
+    <li><a href="#">• Laurea in lettere</a></li>
+    <li><a href="#">• Laurea in Scienze della comunicazione</a></li>
+    <li><a href="#">• Laurea in Editoria e Giornalismo</a></li>
+    <li><a href="#">• Laurea magistrale in Linguistics</a></li>
+    <li><a href="#">• Laurea magistrale in Promozione e gestione del patrimonio territoriale e delle destinazioni turistiche</a></li>
+    <li><a href="#">• Laurea magistrale in Storia delle arti</a></li>
+    <li><a href="#">• Laurea magistrale interateneo in Quaternario, Preistoria e Archeologia</a></li>
+    <li><a href="#">• Laurea magistrale interateneo in Scienze Storiche</a></li>
+    <li><a href="#">• Laurea magistrale in Tradizione e interpretazione dei testi letterari</a></li>
+  </ul>
+</div>
+
+<div class="classe collapsed" data-classe="Informatica">
+  <h5>
+    <span class="dip-label">DIPARTIMENTO DI</span>
+    <span class="dip-name">INFORMATICA</span>
+  </h5>
+  <ul>
+    <li><a href="#">• Laurea in Informatica</a></li>
+    <li><a href="#">• Laurea in Matematica applicata</a></li>
+    <li><a href="#">• Laurea in Bioinformatica</a></li>
+    <li><a href="#">• Laurea magistrale in Ingegneria e scienze informatiche</a></li>
+    <li><a href="#">• Laurea magistrale in Mathematics</a></li>
+    <li><a href="#">• Laurea magistrale in Medical bioinformatics</a></li>
+    <li><a href="#">• Laurea magistrale in Data Science</a></li>
+    <li><a href="#">• Laurea magistrale in Artificial Intelligence</a></li>
+  </ul>
+</div>
+
+<div class="classe collapsed" data-classe="Ingegneria per la Medicina di Innovazione">
+  <h5>
+    <span class="dip-label" style="font-size:0.85em;">DIPARTIMENTO DI</span>
+    <span class="dip-name" style="font-size:0.92em;">
+      INGEGNERIA PER LA MEDICINA<br>DI INNOVAZIONE
+    </span>
+  </h5>
+  <ul>
+    <li><a href="#">• Laurea in Ingegneria dei Sistemi Robotici e Intelligenti</a></li>
+    <li><a href="#">• Laurea in Ingegneria dei Sistemi Medicali per la Persona</a></li>
+    <li><a href="#">• Laurea magistrale in Computer Engineering for intelligent Systems</a></li>
+    <li><a href="#">• Laurea magistrale in Bioingegneria per l'Innovazione in Medicina</a></li>
+  </ul>
+</div>
+
+<div class="classe collapsed" data-classe="Medicina">
+  <h5>
+    <span class="dip-label">DIPARTIMENTO DI</span>
+    <span class="dip-name">MEDICINA</span>
+  </h5>
+  <ul>
+    <li><a href="#">• Laurea in Assistenza sanitaria</a></li>
+    <li><a href="#">• Laurea in Osteopatia</a></li>
+    <li><a href="#">• Laurea in Fisioterapia (Verona)</a></li>
+    <li><a href="#">• Laurea in Fisioterapia (Vicenza)</a></li>
+    <li><a href="#">• Laurea in logopedia</a></li>
+    <li><a href="#">• Laurea in Infermieristica (Legnago)</a></li>
+    <li><a href="#">• Laurea in Infermieristica (Verona)</a></li>
+    <li><a href="#">• Laurea in Infermieristica (Vicenza)</a></li>
+    <li><a href="#">• Laurea in Ostetricia</a></li>
+    <li><a href="#">• Laurea in Igiene dentale</a></li>
+    <li><a href="#">• Laurea in Tecniche di fisiopatologia cardiocircolatoria e perfusione cardiovascolare</a></li>
+    <li><a href="#">• Laurea in Tecniche di laboratorio biomedico</a></li>
+    <li><a href="#">• Laurea in Tecniche di radiologia medica, per immagini e radioterapia</a></li>
+    <li><a href="#">• Laurea in tecniche ortopediche</a></li>
+    <li><a href="#">• Laurea in Scienze motorie, sport e benessere</a></li>
+    <li><a href="#">• Semestre Filtro per l’accesso a Medicina e chirurgia Odontoiatria e protesi dentaria</a></li>
+    <li><a href="#">• Laurea in Scienze delle attivita motorie e sportive</a></li>
+    <li><a href="#">• Laurea magistrale in biology for translational research and precision medicine</a></li>
+    <li><a href="#">• Laurea magistrale in Scienze delle professioni sanitarie tecniche assistenziali</a></li>
+    <li><a href="#">• Laurea magistrale in Scienze infermieristiche e ostetriche</a></li>
+    <li><a href="#">• Laurea magistrale in Scienze motorie e preventive ed adattate</a></li>
+    <li><a href="#">• Laurea magistrale in Scienze riabilitative delle professioni sanitarie</a></li>
+    <li><a href="#">• Laurea magistrale interateneo in Salute e Sport</a></li>
+    <li><a href="#">• Laurea magistrale interateneo in Scienze dello sport e della prestazione fisica</a></li>
+    <li><a href="#">• Laurea magistrale a ciclo unico in Farmacia</a></li>
+    <li><a href="#">• Laurea magistrale a ciclo unico in Medicina e Chirurgia</a></li>
+    <li><a href="#">• Laurea magistrale a ciclo unico in Medicina e Chirurgia ad indirizzo tecnologico</a></li>
+    <li><a href="#">• Laurea magistrale a ciclo unico in Odontoiatria e protesi dentaria</a></li>
+  </ul>
+</div>
+    </div>
+  </div>
+
+  <footer style="background-color: #23272b; color: #fff; padding: 3rem 0 2rem 0; margin-top: 3rem;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <h5 class="mb-3">Matricole Verona</h5>
+          <p>Risorse, informazioni e supporto per le nuove matricole dell'Università di Verona.</p>
+        </div>
+        <div class="col-md-4 mb-4"></div>
+        <div class="col-md-4 mb-4 d-flex flex-column align-items-end justify-content-center">
+          <h5 class="mb-3 text-end">Contatti</h5>
+          <ul class="list-unstyled text-start" style="text-align:left;">
+            <li><i class="fas fa-envelope me-2"></i> info.auvr@gmail.com</li>
+            <li><i class="fas fa-map-marker-alt me-2"></i> Verona, Italia</li>
+            <li><i class="fab fa-instagram fa-lg"></i> azioneuniversitariaverona</li>
+            <li><i class="fab fa-tiktok fa-lg"></i> azioneunivr</li>
+          </ul>
+        </div>
+      </div>
+      <hr style="border-color: #444;">
+      <div class="text-center" style="color:#bbb;">
+        <small>
+          <b>Disclaimer:</b> Questo sito non è in alcun modo affiliato, sponsorizzato o approvato dall'Università di Verona. 
+          È un progetto indipendente creato dagli studenti, con l'obiettivo di offrire rappresentanza, supporto e informazioni utili alla comunità studentesca.
+        </small>
+      </div>
+      <div class="text-center" style="color:#bbb; margin-top:0.5rem;">
+        &copy; 2024 Matricole Verona. Tutti i diritti riservati.
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const gridContainer = document.getElementById('gridContainer');
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    const classi = Array.from(document.querySelectorAll('.classe'));
+    const searchData = [];
+
+    classi.forEach(classe => {
+      const deptName = classe.dataset.classe;
+      searchData.push({ text: deptName, element: classe, type: 'department' });
+      classe.querySelectorAll('ul li a').forEach(link => {
+        searchData.push({ text: link.textContent.replace('•', '').trim(), element: classe, type: 'course', linkEl: link });
+      });
+    });
+
+    const fuse = new Fuse(searchData, {
+      keys: ['text'],
+      includeScore: true,
+      threshold: 0.3,
+      minMatchCharLength: 3,
+      ignoreLocation: true,
+      shouldSort: true
+    });
+
+    function chiudiTutte() {
+      classi.forEach(c => {
+        c.classList.add('collapsed');
+        c.classList.remove('expanded');
+        c.style.display = '';
+      });
+    }
+
+    classi.forEach(classe => {
+      classe.addEventListener('click', function(e) {
+        if (e.target.tagName.toLowerCase() === 'a') return;
+        const isExpanded = classe.classList.contains('expanded');
+        classi.forEach(c => {
+          c.classList.add('collapsed');
+          c.classList.remove('expanded');
+        });
+        if (!isExpanded) {
+          classe.classList.remove('collapsed');
+          classe.classList.add('expanded');
+        }
+      });
+    });
+
+    document.addEventListener('click', function(e) {
+      const expanded = document.querySelector('.classe.expanded');
+      if (!expanded) return;
+      if (expanded.contains(e.target)) return;
+      classi.forEach(c => {
+        c.classList.add('collapsed');
+        c.classList.remove('expanded');
+      });
+    }, true);
+
+    function eseguiRicerca(q) {
+      if (q === '') {
+        searchResults.style.display = 'none';
+        searchResults.innerHTML = '';
+        gridContainer.style.display = '';
+        chiudiTutte();
+        return;
+      }
+      let results = fuse.search(q, { limit: 10 });
+
+      // --- INIZIO: Priorità per "Semestre Filtro..." se query contiene "medicina" o simili ---
+      const queryNorm = q.trim().toLowerCase();
+      const medicinaKeywords = [
+        "medicina", "med", "medic", "medico", "chirurgia", "odontoiatria", "filtro"
+      ];
+      const matchMedicina = medicinaKeywords.some(k => queryNorm.includes(k));
+      if (matchMedicina) {
+        // Trova la voce desiderata
+        const filtroText = "Semestre Filtro per l’accesso a Medicina e chirurgia Odontoiatria e protesi dentaria";
+        const idx = results.findIndex(r =>
+          r.item.text.replace(/•/g, '').trim().toLowerCase() === filtroText.toLowerCase()
+        );
+        if (idx > 0) {
+          // Sposta in cima
+          const [item] = results.splice(idx, 1);
+          results.unshift(item);
+        } else if (idx === -1) {
+          // Se non trovata nei risultati limitati, cerca in tutti i dati
+          const filtroItem = searchData.find(
+            d => d.text.replace(/•/g, '').trim().toLowerCase() === filtroText.toLowerCase()
+          );
+          if (filtroItem) {
+            results.unshift({ item: filtroItem, refIndex: -1, score: 0 });
+          }
+        }
+      }
+      // --- FINE: Priorità ---
+
+      gridContainer.style.display = 'none';
+      searchResults.style.display = '';
+      if (results.length === 0) {
+        searchResults.innerHTML = '<div class="text-center text-muted" style="padding:2rem;">Nessun risultato trovato per: <b>' + q + '</b></div>';
+        return;
+      }
+      let html = '<ul class="list-group">';
+      results.forEach((result, idx) => {
+        const item = result.item;
+        const sectionIdx = classi.indexOf(item.element);
+        const baseColor = palette[sectionIdx % palette.length];
+        // Funzione per schiarire il colore per i link
+        function lighten(hex, percent) {
+          let num = parseInt(hex.replace('#',''),16),
+              amt = Math.round(2.55 * percent),
+              R = (num >> 16) + amt,
+              G = (num >> 8 & 0x00FF) + amt,
+              B = (num & 0x0000FF) + amt;
+          return "#" + (
+            0x1000000 +
+            (R>255?255:R<0?0:R)*0x10000 +
+            (G>255?255:G<0?0:G)*0x100 +
+            (B>255?255:B<0?0:B)
+          ).toString(16).slice(1);
+        }
+        // Ottieni il colore del testo dalla classe corrispondente
+        let textColor = window.getComputedStyle(item.element).color;
+
+        // Icona coerente con la classe
+        // const nome = item.element?.dataset?.classe;
+        // const iconClass = classIcons[nome] || "fa-graduation-cap";
+        // let icon = `<i class="fas ${iconClass} me-2" style="color:${textColor};"></i>`;
+        if (item.type === 'department') {
+          // Salta la visualizzazione degli h5 (dipartimenti)
+          return;
+        } else {
+          let lighterBg = lighten(baseColor, 18);
+          let href = '';
+          if (item.linkEl) {
+            href = item.linkEl.getAttribute('href') || '#';
+          } else {
+            const links = item.element.querySelectorAll('ul li a');
+            links.forEach(link => {
+              if (link.textContent.replace('•', '').trim() === item.text) {
+                href = link.getAttribute('href') || '#';
+              }
+            });
+          }
+          html += `<li class="list-group-item d-flex align-items-center" data-result-index="${idx}" data-type="course" style="background:${lighterBg}; color:${textColor};">` +
+            // icon + // RIMOSSO: nessuna icona
+            `<a href="${href}" class="search-link" style="text-decoration:none;color:${textColor};background:${lighterBg};border-radius:0.3rem;padding:4px 10px;display:inline-block;width:100%;" target="_blank">${item.text}</a>` +
+            '</li>';
+        }
+      });
+      html += '</ul>';
+      searchResults.innerHTML = html;
+
+      // Gestione click sui risultati
+      searchResults.querySelectorAll('li[data-result-index]').forEach((li, idx) => {
+        const item = results[idx].item;
+        if (item.type === 'department') {
+          // Cambiato: ora il click su tutta la barra attiva l'espansione
+          li.onclick = function(e) {
+            searchResults.style.display = 'none';
+            gridContainer.style.display = '';
+            classi.forEach(c => {
+              if (c === item.element) {
+                c.classList.remove('collapsed');
+                c.classList.add('expanded');
+              } else {
+                c.classList.add('collapsed');
+                c.classList.remove('expanded');
+              }
+              c.style.display = '';
+            });
+            searchInput.value = '';
+            setTimeout(() => {
+              item.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+          };
+        }
+        // Per i link, nessun handler JS: il click sull'<a> apre direttamente il link
+      });
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      eseguiRicerca(e.target.value.trim());
+    });
+
+    // Rimuovi le icone anche nelle classi (icone in h5 e sfondo)
+    classi.forEach((classe, idx) => {
+      // Rimuovi icona di sfondo se presente
+      const bgIcon = classe.querySelector('.classe-bg-icon');
+      if (bgIcon) bgIcon.remove();
+      // Rimuovi icona in h5 se presente
+      const h5 = classe.querySelector('h5');
+      if (h5) {
+        const h5Icon = h5.querySelector('.classe-h5-icon');
+        if (h5Icon) h5Icon.remove();
+      }
+    });
+
+    // Colori moderni e stilosi per ogni classe
+    const palette = [
+      "#F1CB08", "#E27400", "#00648C", "#ED578D", "#217500", "#FFFFFF", "#217500",
+      "#111111", "#BD0000", "#e6f0ff", "#f6f6e6", "#e6ffe6", "#f6e6ff", "#e6f6ff"
+    ];
+    classi.forEach((classe, idx) => {
+      const color = palette[idx % palette.length];
+      classe.style.backgroundColor = color;
+      classe.style.borderColor = "#d0d7e6";
+      classe.style.backdropFilter = "blur(2px)";
+      classe.style.boxShadow = "0 4px 24px 0 rgba(60, 80, 180, 0.07)";
+    });
+
+    chiudiTutte();
+  });
+  </script>
+</body>
+</html>
