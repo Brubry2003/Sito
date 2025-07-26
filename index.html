@@ -3,39 +3,118 @@
 <head>
   <meta charset="UTF-8" />
   <title>Dipartimenti & Facoltà</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     body {
-      background: #f5f6fa;
+      background: #fff;
       min-height: 100vh;
       font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
       color: #1d2731;
     }
-    .navbar {
-      background: #1d2731;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      height: 49px;
+    body, html {
       width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+    .navbar {
+      background: #fff !important;
+      box-shadow: none;
+      color: #223142;
+      min-height: 70px;
+      height: 70px;
+      width: 100vw;
       max-width: 100vw;
       margin: 0;
       padding: 0;
+      border: none;
     }
-    .navbar .navbar-brand {
-      color: #fff;
-      font-weight: 700;
-      font-size: 1.25rem;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      padding-left: 0.2rem;
+    .navbar {
+      width: 100%;
+      max-width: 100vw;
+      min-width: 0;
+      padding: 0 1rem;
+      box-sizing: border-box;
     }
+    /* Navbar logo: spostato più a destra, sempre responsive */
+.navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  position: absolute;
+  left: max(3vw, calc((100vw - 1040px) / 2));
+  top: 0;
+  transform: none;
+  z-index: 1100;
+  height: 70px;
+  padding-left: 0;
+  padding-right: 0;
+  width: auto;
+}
+.navbar .navbar-brand img {
+  width: 260px;
+  max-width: 60vw;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+}
+@media (max-width: 1200px) {
+  .navbar .navbar-brand {
+    left: max(2vw, calc((100vw - 99vw) / 2));
+    padding-left: 0;
+  }
+  .navbar .navbar-brand img {
+    width: 200px;
+    max-width: 50vw;
+  }
+}
+@media (max-width: 900px) {
+  .navbar .navbar-brand {
+    position: static;
+    left: 0;
+    top: 0;
+    transform: none;
+    justify-content: flex-start;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    padding-left: 1rem;
+  }
+  .navbar .navbar-brand img {
+    width: 160px;
+    max-width: 60vw;
+  }
+}
+@media (max-width: 600px) {
+  .navbar .navbar-brand {
+    position: static;
+    left: 0;
+    top: 0;
+    transform: none;
+    justify-content: flex-start;
+    margin-bottom: 0.3rem;
+    width: 100%;
+    padding-left: 0.2rem;
+  }
+  .navbar .navbar-brand img {
+    width: 120px;
+    max-width: 70vw;
+  }
+}
     .navbar .lang-flags {
       display: flex;
       align-items: center;
-      gap: 1.2rem; /* più spazio tra le bandiere */
-      padding-left: 0.5rem;
+      gap: 0.7rem;
+      padding-left: 0;
     }
     .navbar .lang-flag {
       width: 32px;
@@ -43,8 +122,8 @@
       object-fit: cover;
       background: #fff;
       cursor: pointer;
-      border: none;
-      padding: 0;
+      border: 1px solid #e3e6ed;
+      border-radius: 4px;
       transition: box-shadow 0.2s, border 0.2s, transform 0.18s;
     }
     .navbar .lang-flag:hover {
@@ -53,113 +132,248 @@
       transform: scale(1.18);
       z-index: 2;
     }
-    .navbar .nav-link {
-      color: #fff;
-      font-weight: 400;
-      font-size: 0.98rem;
-      border-radius: 0.3rem;
-      padding: 0.3rem 0.45rem;
-      transition: background 0.2s, color 0.2s;
+    .navbar .navbar-social {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      margin-left: 0;
     }
-    .navbar .nav-link:hover, .navbar .nav-link.active {
-      color: #ffd700;
+    .navbar .navbar-social a {
+      color: #223142;
+      font-size: 1.35rem;
+      transition: color 0.18s;
+      display: flex;
+      align-items: center;
+    }
+    .navbar .navbar-social a:hover {
+      color: #0052a3;
+    }
+    .navbar .contattaci-btn {
       background: #223142;
-    }
-    .navbar-toggler {
-      border: none;
-      background: transparent;
-    }
-    .navbar-toggler-icon {
       color: #fff;
-      font-size: 1.3rem;
-    }
-    @media (max-width: 991.98px) {
-      .navbar .navbar-nav .nav-link {
-        padding: 0.7rem 1rem;
-      }
-      .navbar-nav.flex-row {
-        flex-direction: column !important;
-        gap: 0 !important;
-      }
-      .vr-sep {
-        display: none;
-      }
-    }
-    h1, h2, h3 {
-      font-family: 'Segoe UI', Arial, sans-serif;
+      border-radius: 1.5rem;
       font-weight: 700;
-      color: #1d2731;
-      margin-bottom: 0.3rem;
+      font-size: 1.1rem;
+      padding: 0.35rem 1.2rem;
+      border: none;
+      margin-left: 0;
+      letter-spacing: 0.03em;
+      transition: background 0.18s, color 0.18s;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    h1 { font-size: 1.3rem; margin-top: 1.2rem; }
-    h2 { font-size: 1.05rem; }
-    h3 { font-size: 0.95rem; }
+    .navbar .contattaci-btn:hover {
+      background: #0052a3;
+      color: #ffd700;
+    }
+    .hero-section {
+      background: #17407b !important;
+      border-radius: 1.5rem;
+      box-shadow: 0 4px 24px 0 rgba(0, 82, 163, 0.10);
+      padding: 2.2rem 2.2rem 1.7rem 2.2rem;
+      max-width: 1150px;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+      color: #fff;
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 120px;
+      box-sizing: border-box;
+    }
+    .hero-section .hero-icon {
+      flex: 0 0 auto;
+      margin-right: 2.2rem;
+      margin-left: 1.2rem;
+      font-size: 4.5rem;
+      color: #fff;
+      filter: drop-shadow(0 2px 8px #0002);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-section .hero-content {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+    .hero-section h1 {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.7rem;
+      color: #fff;
+      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    }
+    .hero-section p {
+      font-size: 1.08rem;
+      font-weight: 400;
+      color: #e3f0fa;
+      margin-bottom: 0;
+      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    }
+    @media (max-width: 900px) {
+      .hero-section {
+        max-width: 99vw;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+        box-sizing: border-box;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .hero-section .hero-icon {
+        margin: 0 0 1rem 0;
+        font-size: 3.2rem;
+      }
+      .hero-section .hero-content {
+        width: 100%;
+      }
+      .hero-section h1 {
+        font-size: 1.3rem;
+      }
+      .hero-section p {
+        font-size: 0.98rem;
+      }
+    }
+    @media (max-width: 600px) {
+      .hero-section {
+        max-width: 99vw;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+        box-sizing: border-box;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .hero-section .hero-icon {
+        margin: 0 0 1rem 0;
+        font-size: 3.2rem;
+      }
+      .hero-section .hero-content {
+        width: 100%;
+      }
+      .hero-section h1 {
+        font-size: 1.3rem;
+      }
+      .hero-section p {
+        font-size: 0.98rem;
+      }
+    }
+    .search-container {
+      position: relative;
+      margin: 2.2rem 0 2.5rem 0;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #searchInput {
+      border-radius: 2rem;
+      padding-left: 1.2rem;
+      box-shadow: none;
+      border: 2.5px solid #17407b;
+      transition: border-color 0.2s;
+      font-size: 1.1rem;
+      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+      height: 48px;
+    }
+    #searchInput:focus {
+      border-color: #0052a3;
+      box-shadow: 0 2px 12px #0077c233;
+    }
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      right: 18px;
+      transform: translateY(-50%);
+      color: #17407b;
+      pointer-events: none;
+      font-size: 1.5rem;
+    }
     .grid-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem 1.5rem;
       margin-bottom: 2.5rem;
       position: relative;
+      max-width: 1150px;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      box-sizing: border-box;
+      overflow-x: hidden;
     }
     .classe {
-      border: 1.5px solid #e3e6ed;
-      border-radius: 0.7rem;
+      border: none;
+      border-radius: 1.5rem;
       background: #fff;
       box-shadow: 0 2px 12px 0 rgba(0, 82, 163, 0.07);
-      transition: box-shadow .25s, border-color .25s, transform .2s, max-height 0.4s cubic-bezier(.4,0,.2,1), padding 0.4s cubic-bezier(.4,0,.2,1);
+      transition:
+        box-shadow 0.6s cubic-bezier(.22,1,.36,1),
+        border-color 0.5s cubic-bezier(.22,1,.36,1),
+        transform 0.5s cubic-bezier(.22,1,.36,1),
+        max-height 0.8s cubic-bezier(.22,1,.36,1),
+        padding 0.8s cubic-bezier(.22,1,.36,1),
+        background 0.5s cubic-bezier(.22,1,.36,1),
+        filter 0.5s cubic-bezier(.22,1,.36,1);
+      will-change: box-shadow, transform, max-height, padding, background, filter;
       max-height: 70px;
       overflow: hidden;
-      padding: 0.7rem 1rem 0.7rem 1rem;
+      padding: 0.7rem 1.2rem 0.7rem 1.2rem;
       position: relative;
       cursor: pointer;
       min-height: 80px;
-      color: #fff; /* testo bianco di default */
-      font-size: 0.97rem;
-      /* Il colore di sfondo sarà sovrascritto via JS per ogni classe */
+      color: #fff;
+      font-size: 1.08rem;
+      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
     }
+    .classe[data-classe="Management"] { background: #F1CB08; color: #223142; }
+    .classe[data-classe="Scienze Economiche"] { background: #E27400; color: #fff; }
+    .classe[data-classe="Scienze Giuridiche"] { background: #2175A9; color: #fff; }
+    .classe[data-classe="Scienze Umane"] { background: #ED578D; color: #fff; }
+    .classe[data-classe="Lingue e Lettere"] { background: #F47CB4; color: #fff; }
+    .classe[data-classe="Culture e Civiltà"] { background: #fff; color: #223142; border: 2px solid #223142; }
+    .classe[data-classe="Ingegneria per la Medicina di Innovazione"] { background: #111111; color: #fff; }
+    .classe[data-classe="Biotecnologie"] { background: #217500; color: #fff; }
+    .classe[data-classe="Informatica"] { background: #1DB954; color: #fff; }
+    .classe[data-classe="Medicina"] { background: #BD0000; color: #fff; }
+    .classe[data-classe="GRUPPI UTILI PER TUTTI"] { background: #2C2CFF; color: #fff; }
     .classe:hover {
-      border-color: #0052a3;
-      box-shadow: 0 8px 32px 0 #0052a31a;
-      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 16px 40px 0 rgba(0,82,163,0.13), 0 2px 12px 0 rgba(0,82,163,0.07);
+      transform: translateY(-2px) scale(1.025);
+      filter: brightness(1.03) saturate(1.08) drop-shadow(0 2px 8px #0052a31a);
     }
     .classe.expanded {
-      grid-column: auto;
       z-index: 2;
-      border-color: #0077c2;
       box-shadow: 0 12px 40px 0 #0052a32a;
       transform: scale(1.01);
-      max-height: 1200px; /* aumentato per mostrare tutte le voci */
+      max-height: 1200px;
       padding-bottom: 1.5rem;
-    }
-    /* Rendi la classe Medicina più larga su desktop */
-    .classe[data-classe="Medicina"] {
-      /* grid-column: span 2; */ /* RIMUOVI questa regola per uniformare Medicina alle altre */
-    }
-    @media (max-width: 1200px) {
-      .classe[data-classe="Medicina"] {
-        /* grid-column: span 1; */ /* RIMUOVI questa regola */
-      }
-    }
-    @media (max-width: 767.98px) {
-      .grid-container {
-        grid-template-columns: 1fr;
-        gap: 1.1rem;
-      }
-      .classe.expanded {
-        grid-column: 1 / -1;
-      }
-      .classe {
-        padding: 1rem 0.7rem 0.7rem 0.7rem;
-      }
-      .classe[data-classe="Medicina"] {
-        /* grid-column: span 1; */ /* RIMUOVI questa regola */
-      }
+      transition:
+        box-shadow 0.8s cubic-bezier(.22,1,.36,1),
+        border-color 0.7s cubic-bezier(.22,1,.36,1),
+        transform 0.7s cubic-bezier(.22,1,.36,1),
+        max-height 1s cubic-bezier(.22,1,.36,1),
+        padding 1s cubic-bezier(.22,1,.36,1),
+        background 0.7s cubic-bezier(.22,1,.36,1),
+        filter 0.7s cubic-bezier(.22,1,.36,1);
     }
     .classe h5 {
-      font-size: 1.01rem;
-      color: #fff;
+      font-size: 1.1rem;
       font-weight: 900;
-      margin-bottom: 1.1rem;
+      margin-bottom: 0.7rem;
       padding-right: 28px;
       position: relative;
       letter-spacing: 0.1px;
@@ -185,7 +399,6 @@
       letter-spacing: 0.09em;
       min-height: 56px;
       flex-direction: column;
-      /* Copri tutta la cella */
       position: absolute;
       left: 0; top: 0; right: 0; bottom: 0;
       background: transparent;
@@ -246,12 +459,12 @@
       transform: translateY(-50%);
       transition: transform 0.3s ease;
       pointer-events: none;
-      color: #fff; /* freccia bianca di default */
+      color: inherit;
       font-size: 1.1rem;
       opacity: 0.85;
     }
     .classe:not(.collapsed) h5::after {
-      color: #fff; /* freccia bianca anche quando espansa */
+      color: inherit;
     }
     .classe ul {
       list-style: none;
@@ -261,25 +474,32 @@
       margin-top: 0.2rem;
       max-height: 0;
       opacity: 0;
-      transition: max-height 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s;
+      transition:
+        max-height 0.8s cubic-bezier(.22,1,.36,1),
+        opacity 0.6s cubic-bezier(.22,1,.36,1);
     }
     .classe:not(.collapsed) ul {
       display: block;
-      max-height: 1200px; /* aumentato per mostrare tutte le voci */
+      max-height: 1200px;
       opacity: 1;
-      animation: fadeIn 0.3s;
+      animation: fadeInModern 0.5s cubic-bezier(.22,1,.36,1);
+    }
+    @keyframes fadeInModern {
+      0% { opacity: 0; transform: translateY(16px) scale(0.98); }
+      60% { opacity: 1; transform: translateY(-2px) scale(1.03); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
     }
     .classe ul li {
       margin-bottom: 0.18rem;
       font-size: 0.93rem;
-      color: #fff; /* testo bianco nelle liste */
-      font-family: 'Segoe UI', Arial, sans-serif;
+      color: inherit;
+      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
       position: relative;
       padding-left: 0.2rem;
     }
     .classe ul li a {
-      color: #fff; /* link bianco di default */
-      text-decoration: none;
+      color: #0052a3 !important;
+      text-decoration: underline;
       border-radius: 0.2rem;
       padding: 1px 4px;
       transition: background 0.2s, color 0.2s, transform 0.15s;
@@ -294,8 +514,8 @@
       text-decoration: underline;
     }
     .search-link {
-      color: #1d2731;
-      text-decoration: none;
+      color: #0052a3 !important;
+      text-decoration: underline;
       border-radius: 0.2rem;
       padding: 1px 4px;
       transition: background 0.2s, color 0.2s;
@@ -305,51 +525,19 @@
     }
     .search-link:hover {
       background: none !important;
-      color: #0052a3 !important;
-      /* niente transform */
+      color: #ffd700 !important;
       text-decoration: underline;
     }
-    .search-container {
-      position: relative;
-      margin: 1.5rem 0 2.5rem 0;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .search-icon {
-      position: absolute;
-      top: 50%;
-      right: 15px;
-      transform: translateY(-50%);
-      color: #0077c2;
-      pointer-events: none;
-      font-size: 1.2rem;
-    }
-    #searchInput {
-      border-radius: 2rem;
-      padding-left: 1.2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      border: 1.5px solid #0077c2;
-      transition: border-color 0.2s;
-    }
-    #searchInput:focus {
-      border-color: #0052a3;
-      box-shadow: 0 2px 12px #0077c233;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
     footer {
-      background: #1d2731;
-      border-top: 2px solid #0052a3;
+      background: #17407b !important;
+      border-top: none;
       color: #fff;
       padding: 2.5rem 0 1.5rem 0;
       margin-top: 3rem;
-      box-shadow: 0 -2px 12px #0001;
+      box-shadow: none;
     }
     footer h5 {
-      font-family: 'Segoe UI', Arial, sans-serif;
+      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
       font-weight: 700;
       color: #fff;
       letter-spacing: 0.5px;
@@ -366,36 +554,138 @@
     footer hr {
       border-color: #e3e6ed;
     }
-    .vr-sep {
-      display: inline-block;
-      width: 1.5px;
-      height: 49px;
-      background: #fff8;
-      margin: 0 0.7rem 0 0.5rem;
-      border-radius: 1px;
-      vertical-align: middle;
-      position: relative;
-      top: 0;
-      align-self: stretch;
-      min-height: 49px;
+    .footer-logo {
+      width: 180px;
+      height: auto;
+      margin-top: 1.2rem;
     }
-    @media (max-width: 991.98px) {
-      .navbar-nav.flex-row {
-        flex-direction: column !important;
-        gap: 0 !important;
-      }
-      /* .vr-sep {
-        display: none;
-      } */
-      /* RIMOSSO: la barra resta visibile anche su mobile */
+    .footer-contatti-title {
+      background: #fff;
+      color: #17407b;
+      font-weight: 900;
+      border-radius: 1.2rem;
+      padding: 0.2em 1.2em;
+      display: inline-block;
+      font-size: 1.2rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 1.1rem;
+    }
+    .footer-contatti-list {
+      font-size: 1.08rem;
+      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .footer-contatti-list i {
+      margin-right: 0.6em;
+      color: #fff;
     }
     @media (max-width: 600px) {
-      h1 { font-size: 1.3rem; }
-      h2 { font-size: 1.05rem; }
-      h3 { font-size: 0.95rem; }
-      .classe { padding: 0.8rem 0.7rem; }
-      .grid-container { gap: 0.7rem; }
+      .hero-section {
+        max-width: 99vw;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+        box-sizing: border-box;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .hero-section .hero-icon {
+        margin: 0 0 1rem 0;
+        font-size: 3.2rem;
+      }
+      .hero-section .hero-content {
+        width: 100%;
+      }
+      .hero-section h1 {
+        font-size: 1.3rem;
+      }
+      .hero-section p {
+        font-size: 0.98rem;
+      }
+      .grid-container {
+        gap: 0.7rem;
+        padding: 0 0.2rem;
+      }
       .search-container { margin-bottom: 1.2rem; }
+      html, body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+      }
+      .container,
+      .grid-container,
+      .search-container,
+      .hero-section,
+      footer {
+        margin-left: auto !important;
+        margin-right: auto !important;
+        left: 0;
+        right: 0;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+      }
+      .navbar {
+        min-height: 48px;
+        height: auto;
+        padding: 0 0.5rem;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .navbar .navbar-brand {
+        gap: 0.3rem;
+        padding-left: 0;
+        min-width: 0;
+        max-width: 90vw;
+        overflow-x: hidden;
+        display: flex;
+        align-items: center;
+      }
+      .navbar .navbar-brand img {
+        width: 240px;
+        height: auto;
+        margin-right: 0.2rem;
+        max-width: 90vw;
+        flex-shrink: 0;
+      }
+      .navbar .lang-flags {
+        gap: 0.3rem;
+        padding-left: 0.2rem;
+      }
+      .navbar .navbar-social {
+        gap: 0.5rem;
+        margin-left: 0.5rem;
+      }
+      .navbar .contattaci-btn {
+        font-size: 0.92rem;
+        padding: 0.22rem 0.7rem;
+        margin-left: 0.5rem;
+      }
+      .d-flex.w-100.align-items-center.flex-wrap.justify-content-between {
+        flex-wrap: nowrap !important;
+        flex-direction: row !important;
+        align-items: center !important;
+      }
     }
     /* Rimuovi le icone di sfondo e in h5 dalle classi */
     .classe .classe-bg-icon,
@@ -464,243 +754,405 @@
       0%   { transform: translateX(100vw); }
       100% { transform: translateX(-100%); }
     }
+    /* Navbar right section: bandiere, social, contattaci - responsive e allineati a destra */
+.navbar .navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  position: absolute;
+  /* Sposta verso sinistra rispetto al bordo destro */
+  right: calc(50vw - 520px);
+  top: 0;
+  z-index: 1100;
+  height: 70px;
+  padding-right: 0;
+  padding-left: 0;
+}
+@media (max-width: 1200px) {
+  .navbar .navbar-right {
+    right: calc(50vw - 495px);
+    padding-right: 0;
+  }
+}
+@media (max-width: 900px) {
+  .navbar .navbar-right {
+    position: static;
+    right: 0;
+    top: 0;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    justify-content: flex-end;
+    padding-right: 1rem;
+    gap: 0.7rem;
+  }
+  .navbar-right {
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    gap: 0.7rem;
+    margin-bottom: 0;
+    padding-right: 0;
+  }
+}
+@media (max-width: 600px) {
+  .navbar .navbar-right,
+  .navbar-right {
+    position: static;
+    right: 0;
+    top: 0;
+    margin-bottom: 0.3rem;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-direction: row;
+    padding-right: 0.2rem;
+  }
+  .navbar-social {
+    gap: 0.7rem;
+    margin-left: 0;
+  }
+  .lang-flags {
+    gap: 0.5rem;
+    padding-left: 0;
+  }
+  .contattaci-btn {
+    font-size: 0.92rem;
+    padding: 0.22rem 0.7rem;
+    margin-left: 0;
+  }
+}
+.hide-mobile {
+  display: flex;
+}
+@media (max-width: 600px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+  .container,
+  .grid-container,
+  .search-container,
+  .classe,
+  .footer-contatti-list,
+  .footer-contatti-title,
+  .hero-section,
+  .search-link {
+    font-size: 0.92rem !important;
+  }
+  .classe h5,
+  .classe.collapsed h5 .dip-label,
+  .classe.collapsed h5 .dip-name,
+  .classe.expanded h5 .dip-label,
+  .classe.expanded h5 .dip-name {
+    font-size: 0.97rem !important;
+  }
+  .search-container input,
+  #searchInput {
+    font-size: 0.92rem !important;
+  }
+  .footer-logo {
+    width: 200px !important;
+  }
+  @media (max-width: 767.98px) {
+      .footer-logo {
+        display: none !important;
+      }
+      .footer-contatti-title {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg" style="width:100vw; position:fixed; top:0; z-index:1050; background:#223142 !important; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-    <div class="container-fluid p-0 m-0" style="height:49px;">
-      <div class="d-flex w-100 align-items-center flex-wrap" style="height:49px;">
+  <nav class="navbar navbar-expand-lg" style="width:100vw; position:relative; top:0; z-index:1050; border:none;">
+    <div class="container-fluid p-0 m-0" style="min-height:70px;">
+      <div class="d-flex w-100 align-items-center flex-wrap justify-content-between" style="min-height:70px;">
+        <!-- Logo a sinistra (desktop) o in alto (mobile) -->
         <div class="d-flex align-items-center">
-          <div class="lang-flags">
-            <img src="https://flagcdn.com/gb.svg" alt="English" class="lang-flag" title="English" id="flag-en">
-            <img src="https://flagcdn.com/it.svg" alt="Italiano" class="lang-flag" title="Italiano">
-            <span class="vr-sep"></span>
-          </div>
+          <span class="navbar-brand">
+            <!-- Logo Azione Universitaria -->
+            <img src="logo-auvr.png" alt="Azione Universitaria">
+          </span>
         </div>
-        <!-- Marquee Disclaimer RIMOSSO -->
+        <!-- Elementi destra navbar: bandiere, social, contattaci -->
+        <div class="navbar-right d-flex align-items-center" style="gap:1.2rem;">
+          <!-- Bandiere -->
+          <div class="lang-flags d-flex align-items-center hide-mobile" style="gap:0.7rem;">
+            <img src="https://flagcdn.com/it.svg" alt="Italiano" class="lang-flag" title="Italiano">
+            <img src="https://flagcdn.com/gb.svg" alt="English" class="lang-flag" title="English">
+          </div>
+          <!-- Social -->
+          <div class="navbar-social d-flex align-items-center hide-mobile" style="gap:1.1rem;">
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+          </div>
+          <!-- Contattaci -->
+          <a href="#contatti-footer" class="contattaci-btn">CONTATTACI</a>
+        </div>
       </div>
     </div>
   </nav>
 
-  <div class="hero-fullwidth w-100 d-flex align-items-center justify-content-center" style="min-height: 180px; padding-top: 65px; padding-bottom: 30px; background:#383838;">
-     <img src="verona.png" alt="citta di verona" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0.1; z-index:-1;">
-    <div class="w-100 text-center">
-      <h1 style="font-size:2rem; font-weight:800; letter-spacing:0.5px; color:#fff; margin-bottom:0.7rem;">
-        GRUPPI WHATSAPP MATRICOLE UNIVR
-      </h1>
-
-      <h3 style="font-size:1.05rem; color:#bfc8e6; font-weight:400; margin-bottom:0;">
-        Cerca il tuo corso di triennale o magistrale ed entra nella community universitaria!
-      </h3>
+  <!-- Hero rettangolare blu con logo whatsapp bianco -->
+  <div class="hero-section">
+    <span class="hero-icon">
+      <i class="fab fa-whatsapp"></i>
+    </span>
+    <div class="hero-content">
+      <h1>Gruppi Whatsapp UNIVR.</h1>
+      <p>sei una <b>matricola di UNIVR?</b> entra nel gruppo del tuo corso per <b>rimanere sempre sul pezzo!</b></p>
     </div>
   </div>
 
   <!-- Ricerca -->
+  <div class="search-container">
+    <input type="text" id="searchInput" class="form-control" placeholder="Cerca la tua facoltà" />
+    <i class="fas fa-search search-icon"></i>
+  </div>
   <div class="container">
-    <div class="search-container">
-      <input type="text" id="searchInput" class="form-control" placeholder="Cerca dipartimento o facoltà..." />
-      <i class="fas fa-search search-icon"></i>
-    </div>
     <div id="searchResults" style="display:none; margin-bottom:2rem; min-height:250px;"></div>
     <div class="grid-container" id="gridContainer">
 
+<!-- MANAGEMENT -->
 <div class="classe collapsed" data-classe="Management">
   <h5>
     <span class="dip-label">DIPARTIMENTO DI</span>
     <span class="dip-name">MANAGEMENT</span>
   </h5>
   <ul>
-    <li><a href="#">• Laurea in Economia aziendale e management</a></li>
-    <li><a href="#">• Laurea in Economia e innovazione aziendale</a></li>
-    <li><a href="#">• Laurea magistrale in Governance e amministrazione d'impresa</a></li>
-    <li><a href="#">• Laurea magistrale in Management e strategia d'impresa</a></li>
-    <li><a href="#">• Laurea magistrale in Marketing e comunicazione d'impresa</a></li>
-    <li><a href="#">• Laurea magistrale interateneo in Viticulture, enology and wine marketing</a></li>
-    <li><a href="#">• Laurea magistrale Management delle attività sportive innovative e sostenibili</a></li>
-    <li><a href="#">• Laurea magistrale in Supply Chain Management</a></li>
+    <li><a href="https://chat.whatsapp.com/KoKxrrTQqByBGg9uG7mG0R">• L2 Economia Aziendale e Management</a></li>
+    <li><a href="https://chat.whatsapp.com/I3gAaP5kxdN4OModQ8AZkj?mode=ac_t">• L2 Economia e innovazione aziendale</a></li>
+    <li><a href="https://chat.whatsapp.com/I3gAaP5kxdN4OModQ8AZkj?mode=ac_t">• LM-Governance e amministrazione</a></li>
+    <li><a href="https://chat.whatsapp.com/I3gAaP5kxdN4OModQ8AZkj?mode=ac_t">• LM-Management delle attività sportive innovative e sostenibili</a></li>
+    <li><a href="https://chat.whatsapp.com/I3gAaP5kxdN4OModQ8AZkj?mode=ac_t">• LM-Management e strategia d'impresa</a></li>
+    <li><a href="https://chat.whatsapp.com/I3gAaP5kxdN4OModQ8AZkj?mode=ac_t">• LM-Marketing e comunicazione d'impresa</a></li>
+    <li><a href="https://chat.whatsapp.com/I3gAaP5kxdN4OModQ8AZkj?mode=ac_t">• LM-Supply Chain Management</a></li>
+    <li><a href="https://chat.whatsapp.com/I3gAaP5kxdN4OModQ8AZkj?mode=ac_t">• LM-Interateneo in Viticulture, Enology and Wine Marketing</a></li>
   </ul>
 </div>
 
+<!-- SCIENZE ECONOMICHE -->
 <div class="classe collapsed" data-classe="Scienze Economiche">
   <h5>
     <span class="dip-label">DIPARTIMENTO DI</span>
     <span class="dip-name">SCIENZE ECONOMICHE</span>
   </h5>
   <ul>
-    <li><a href="#">• Laurea in Economia e commercio</a></li>
-    <li><a href="#">• Laurea in Economia, imprese e mercati Internazionali</a></li>
-    <li><a href="#">• Laurea magistrale in Banca e finanza</a></li>
-    <li><a href="#">• Laurea magistrale in Economics and data analysis</a></li>
-    <li><a href="#">• Laurea magistrale in International economics and business</a></li>
+    <li><a href="https://chat.whatsapp.com/FVtW3qWEaAJHxXEuudsICv?mode=ac_t">• L2 Economia e commercio</a></li>
+    <li><a href="https://chat.whatsapp.com/I3gAaP5kxdN4OModQ8AZkj?mode=ac_t">• L2 Economia, imprese e mercati internazionali</a></li>
+    <li><a href="https://chat.whatsapp.com/I3gAaP5kxdN4OModQ8AZkj?mode=ac_t">• LM-Banca e finanza</a></li>
+    <li><a href="https://chat.whatsapp.com/I3gAaP5kxdN4OModQ8AZkj?mode=ac_t">• LM-Economics and Data Analysis</a></li>
+    <li><a href="https://chat.whatsapp.com/I3gAaP5kxdN4OModQ8AZkj?mode=ac_t">• LM-International Economics and Business</a></li>
   </ul>
 </div>
 
+<!-- SCIENZE GIURIDICHE -->
 <div class="classe collapsed" data-classe="Scienze Giuridiche">
   <h5>
     <span class="dip-label">DIPARTIMENTO DI</span>
     <span class="dip-name">SCIENZE GIURIDICHE</span>
   </h5>
   <ul>
-    <li><a href="#">• Laurea in Servizi giuridici per imprese, amministrazioni e no profit</a></li>
-    <li><a href="#">• Laurea magistrale a ciclo unico in Giurisprudenza</a></li>
-    <li><a href="#">• Laurea magistrale in Governance dell’emergenza</a></li>
-    <li><a href="#">• Laurea magistrale in Diritto per le tecnologie e l'innovazione sostenibile</a></li>
+    <li><a href="https://chat.whatsapp.com/HcJeFYCzG7cJmsEBvcEI8K">• L2 Servizi giuridici per imprese, amministrazioni e no-profit</a></li>
+    <li><a href="https://chat.whatsapp.com/Gh9NHnx5jB7Ls5qgOFyy9c">• L1 Giurisprudenza</a></li>
+    <li><a href="https://chat.whatsapp.com/Bd6bVw3sBgNDxaLbdmmo5o">• LM Governance dell’emergenza</a></li>
+    <li><a href="https://chat.whatsapp.com/L3dxt5LXgSaIuGh01zZEJi">• LM Scienze giuridiche e criminologiche per la sicurezza e l'intelligence</a></li>
+    <li><a href="https://chat.whatsapp.com/GD1K01nD4aZ0vRRVS2ySDI">• LM Diritto per le tecnologie e l'innovazione sostenibile</a></li>
   </ul>
 </div>
 
+<!-- SCIENZE UMANE -->
 <div class="classe collapsed" data-classe="Scienze Umane">
   <h5>
     <span class="dip-label">DIPARTIMENTO DI</span>
     <span class="dip-name">SCIENZE UMANE</span>
   </h5>
   <ul>
-    <li><a href="#">• Laurea in Filosofia</a></li>
-    <li><a href="#">• Laurea in Scienze dell’educazione</a></li>
-    <li><a href="#">• Laurea in Scienze del servizio sociale</a></li>
-    <li><a href="#">• Laurea in Scienze pscicologiche per la formaizone</a></li>
-    <li><a href="#">• Laurea in Studi Strategici per la sicurezza e le politiche internazionali</a></li>
-    <li><a href="#">• Laurea in Psicologia per la formazione</a></li>
-    <li><a href="#">• Laurea magistrale in Pscicologia per la formazione</a></li>
-    <li><a href="#">• Laurea magistrale in Scienze Filosofiche</a></li>
-    <li><a href="#">• Laurea magistrale in Scienze pedagogiche</a></li>
-    <li><a href="#">• Laurea magistrale in Servizio sociale in ambiti complessi</a></li>
+    <li><a href="https://chat.whatsapp.com/FfBZ90VaKfi88TPVXrZysl">• L2 Filosofia</a></li>
+    <li><a href="https://chat.whatsapp.com/L8c6VQM8hXhKrVuuejkLbw">• L2 Scienze del servizio sociale</a></li>
+    <li><a href="https://chat.whatsapp.com/JI5YnFYWTw0GRgAi1fCGIA">• L2 Scienze dell’educazione</a></li>
+    <li><a href="https://chat.whatsapp.com/IQUFmq490X6HfnFJjcim9C">• L2 Scienze psicologiche per la formazione</a></li>
+    <li><a href="https://chat.whatsapp.com/Ii2vqMqZA4hLip3zH9JVFW?mode=ac_c">• L2 Studi strategici per la sicurezza e le politiche internazionali</a></li>
+    <li><a href="https://chat.whatsapp.com/L5WlcAWC73wJCqtNu80T9S">• LM Psicologia per la formazione</a></li>
+    <li><a href="https://chat.whatsapp.com/Cpzc3oNy7P8GIgM7vtB1Pb">• LM Scienze filosofiche</a></li>
+    <li><a href="https://chat.whatsapp.com/HbelOUUbsRNA3aFJS53XVM">• LM Scienze pedagogiche</a></li>
+    <li><a href="https://chat.whatsapp.com/Dt6Ui1sSzR79OYGArKmMCJ">• LM Servizio Sociale in ambiti complessi</a></li>
+    <li><a href="https://chat.whatsapp.com/Eg07bY1ozeD28SosyyQyul">• LM5 Scienze della formazione primaria</a></li>
   </ul>
 </div>
 
+<!-- BIOTECNOLOGIE -->
 <div class="classe collapsed" data-classe="Biotecnologie">
   <h5>
     <span class="dip-label">DIPARTIMENTO DI</span>
     <span class="dip-name">BIOTECNOLOGIE</span>
   </h5>
   <ul>
-    <li><a href="#">• Laurea in Biotecnologie</a></li>
-    <li><a href="#">• Laurea in Innovazione e sostenibilità nella produzione industriale di alimenti</a></li>
-    <li><a href="#">• Laurea in Scienze e tecnologie viticole ed enologiche</a></li>
-    <li><a href="#">• Laurea magistrale in Biotecnologie agro-alimentari</a></li>
-    <li><a href="#">• Laurea magistrale in Biotecnologie per le biorisorse e lo sviluppo ecosostenibile</a></li>
-    <li><a href="#">• Laurea magistrale in Molecular and medical biotechnology</a></li>
-    <li><a href="#">• Laurea magistrale interateneo in Viticoltura, enologia e mercati vitivinicoli</a></li>
+    <li><a href="https://chat.whatsapp.com/Gy7z0SWLEn94Lftvdxqpco?mode=ac_t">• L2 Biotecnologie</a></li>
+    <li><a href="https://chat.whatsapp.com/Blb9c9YwZFMFywYehBDJCs?mode=ac_t">• L2 Innovazione e sostenibilità nella produzione industriale di alimenti</a></li>
+    <li><a href="https://chat.whatsapp.com/HBtXoG68eG55KJYCPuYYfn?mode=ac_t">• L2 Scienze e tecnologie viticole ed enologiche</a></li>
+    <li><a href="https://chat.whatsapp.com/F9M5PV2kPxL9PHJTIAnOWt?mode=ac_t">• LM Biotecnologie agro-alimentari</a></li>
+    <li><a href="https://chat.whatsapp.com/LQlOcsaegzO1CkZMhldTRR?mode=ac_t">• LM Biotecnologie per le biorisorse e lo sviluppo ecosostenibile</a></li>
+    <li><a href="https://chat.whatsapp.com/FROhrJGLN2gLoXic16bpIY?mode=ac_t">• LM Molecular and medical biotechnology</a></li>
   </ul>
 </div>
 
+<!-- CULTURE E CIVILTÀ -->
 <div class="classe collapsed" data-classe="Culture e Civiltà">
   <h5>
     <span class="dip-label">DIPARTIMENTO DI</span>
     <span class="dip-name">CULTURE E CIVILTÀ</span>
   </h5>
   <ul>
-    <li><a href="#">• Beni culturali</a></li>
-    <li><a href="#">• Laurea in lettere</a></li>
-    <li><a href="#">• Laurea in Scienze della comunicazione</a></li>
-    <li><a href="#">• Laurea in Editoria e Giornalismo</a></li>
-    <li><a href="#">• Laurea magistrale in Linguistics</a></li>
-    <li><a href="#">• Laurea magistrale in Promozione e gestione del patrimonio territoriale e delle destinazioni turistiche</a></li>
-    <li><a href="#">• Laurea magistrale in Storia delle arti</a></li>
-    <li><a href="#">• Laurea magistrale interateneo in Quaternario, Preistoria e Archeologia</a></li>
-    <li><a href="#">• Laurea magistrale interateneo in Scienze Storiche</a></li>
-    <li><a href="#">• Laurea magistrale in Tradizione e interpretazione dei testi letterari</a></li>
+    <li><a href="https://chat.whatsapp.com/DDCVFaYi6Fz5Hl5sbG1V2x?mode=r_c">• L1 Beni culturali</a></li>
+    <li><a href="https://chat.whatsapp.com/ITg3ik5FCoL5ZWbAm6ANHi?mode=r_c">• L10R Lettere</a></li>
+    <li><a href="https://chat.whatsapp.com/EUFWk0H9dAw3hQ1QLcH2Pw?mode=r_c">• L20R Scienze della comunicazione</a></li>
+    <li><a href="https://chat.whatsapp.com/IfiMVZ9XUYR50q1a6y7j8j?mode=r_c">• LM Editoria e giornalismo</a></li>
+    <li><a href="https://chat.whatsapp.com/Ic73dQvPuE4CTvWgKP2s6P?mode=r_c">• LM Linguistics</a></li>
+    <li><a href="https://chat.whatsapp.com/Ly1nkVxBWcNACefLdsP3Sg?mode=r_c">• LM Storia delle Arti</a></li>
+    <li><a href="https://chat.whatsapp.com/II7h9b4eNUhLroa6d6zSiH?mode=r_c">• LM Interateneo in Quaternario, Preistoria e Archeologia</a></li>
+    <li><a href="https://chat.whatsapp.com/FVvueOshvAjIL3vAWplJCv?mode=r_c">• LM Scienze Storiche</a></li>
+    <li><a href="https://chat.whatsapp.com/H7XzA0B4U0JFHkLGxXVYtY?mode=r_c">• LM Tradizione e interpretazione dei testi letterari</a></li>
+    <li><a href="https://chat.whatsapp.com/BWxdbHDQ1xlHm9cR4UeGer?mode=r_c">• LM Promozione e Gestione del Patrimonio Territoriale e delle Destinazioni Turistiche</a></li>
   </ul>
 </div>
 
-<div class="classe collapsed" data-classe="Informatica">
-  <h5>
-    <span class="dip-label">DIPARTIMENTO DI</span>
-    <span class="dip-name">INFORMATICA</span>
-  </h5>
-  <ul>
-    <li><a href="#">• Laurea in Informatica</a></li>
-    <li><a href="#">• Laurea in Matematica applicata</a></li>
-    <li><a href="#">• Laurea in Bioinformatica</a></li>
-    <li><a href="#">• Laurea magistrale in Ingegneria e scienze informatiche</a></li>
-    <li><a href="#">• Laurea magistrale in Mathematics</a></li>
-    <li><a href="#">• Laurea magistrale in Medical bioinformatics</a></li>
-    <li><a href="#">• Laurea magistrale in Data Science</a></li>
-    <li><a href="#">• Laurea magistrale in Artificial Intelligence</a></li>
-  </ul>
-</div>
-
+<!-- INGEGNERIA PER LA MEDICINA DI INNOVAZIONE -->
 <div class="classe collapsed" data-classe="Ingegneria per la Medicina di Innovazione">
   <h5>
-    <span class="dip-label" style="font-size:0.85em;">DIPARTIMENTO DI</span>
-    <span class="dip-name" style="font-size:0.92em;">
-      INGEGNERIA PER LA MEDICINA<br>DI INNOVAZIONE
-    </span>
+    <span class="dip-label">DIPARTIMENTO DI</span>
+    <span class="dip-name">INGEGNERIA PER LA MEDICINA DI INNOVAZIONE</span>
   </h5>
   <ul>
-    <li><a href="#">• Laurea in Ingegneria dei Sistemi Robotici e Intelligenti</a></li>
-    <li><a href="#">• Laurea in Ingegneria dei Sistemi Medicali per la Persona</a></li>
-    <li><a href="#">• Laurea magistrale in Computer Engineering for intelligent Systems</a></li>
-    <li><a href="#">• Laurea magistrale in Bioingegneria per l'Innovazione in Medicina</a></li>
+    <li><a href="https://chat.whatsapp.com/Be4LlsjK2KEAOc9SOodSTb">• L2 Ingegneria dei Sistemi Medicali per la Persona</a></li>
+    <li><a href="https://chat.whatsapp.com/F2gs8FOqlTY4g5OQrc52nG">• L2 Ingegneria dei Sistemi Robotici e Intelligenti</a></li>
+    <li><a href="https://chat.whatsapp.com/LnCMT08xapjAtJaEqpiMeU">• LM Computer Engineering for Intelligent Systems</a></li>
   </ul>
 </div>
 
-<div class="classe collapsed" data-classe="Medicina">
+<!-- LINGUE E LETTERATURE STRANIERE -->
+<div class="classe collapsed" data-classe="Lingue e Lettere">
   <h5>
     <span class="dip-label">DIPARTIMENTO DI</span>
-    <span class="dip-name">MEDICINA</span>
+    <span class="dip-name">LINGUE E LETTERATURE STRANIERE</span>
   </h5>
   <ul>
-    <li><a href="#">• Laurea in Assistenza sanitaria</a></li>
-    <li><a href="#">• Laurea in Osteopatia</a></li>
-    <li><a href="#">• Laurea in Fisioterapia (Verona)</a></li>
-    <li><a href="#">• Laurea in Fisioterapia (Vicenza)</a></li>
-    <li><a href="#">• Laurea in logopedia</a></li>
-    <li><a href="#">• Laurea in Infermieristica (Legnago)</a></li>
-    <li><a href="#">• Laurea in Infermieristica (Verona)</a></li>
-    <li><a href="#">• Laurea in Infermieristica (Vicenza)</a></li>
-    <li><a href="#">• Laurea in Ostetricia</a></li>
-    <li><a href="#">• Laurea in Igiene dentale</a></li>
-    <li><a href="#">• Laurea in Tecniche di fisiopatologia cardiocircolatoria e perfusione cardiovascolare</a></li>
-    <li><a href="#">• Laurea in Tecniche di laboratorio biomedico</a></li>
-    <li><a href="#">• Laurea in Tecniche di radiologia medica, per immagini e radioterapia</a></li>
-    <li><a href="#">• Laurea in tecniche ortopediche</a></li>
-    <li><a href="#">• Laurea in Scienze motorie, sport e benessere</a></li>
-    <li><a href="#">• Semestre Filtro per l’accesso a Medicina e chirurgia Odontoiatria e protesi dentaria</a></li>
-    <li><a href="#">• Laurea in Scienze delle attivita motorie e sportive</a></li>
-    <li><a href="#">• Laurea magistrale in biology for translational research and precision medicine</a></li>
-    <li><a href="#">• Laurea magistrale in Scienze delle professioni sanitarie tecniche assistenziali</a></li>
-    <li><a href="#">• Laurea magistrale in Scienze infermieristiche e ostetriche</a></li>
-    <li><a href="#">• Laurea magistrale in Scienze motorie e preventive ed adattate</a></li>
-    <li><a href="#">• Laurea magistrale in Scienze riabilitative delle professioni sanitarie</a></li>
-    <li><a href="#">• Laurea magistrale interateneo in Salute e Sport</a></li>
-    <li><a href="#">• Laurea magistrale interateneo in Scienze dello sport e della prestazione fisica</a></li>
-    <li><a href="#">• Laurea magistrale a ciclo unico in Farmacia</a></li>
-    <li><a href="#">• Laurea magistrale a ciclo unico in Medicina e Chirurgia</a></li>
-    <li><a href="#">• Laurea magistrale a ciclo unico in Medicina e Chirurgia ad indirizzo tecnologico</a></li>
-    <li><a href="#">• Laurea magistrale a ciclo unico in Odontoiatria e protesi dentaria</a></li>
+    <li><a href="https://chat.whatsapp.com/FEw4qNs6BaJ1xEtqhNp8Fh?mode=ac_c">• Lingue e culture per il Turismo e il Commercio Internazionale</a></li>
+    <li><a href="https://chat.whatsapp.com/FRC48fKVEfJ6qjTdp9B9mc?mode=ac_c">• Lingue e letterature per l’editoria e i media digitali</a></li>
+    <li><a href="https://chat.whatsapp.com/GO4LCmWdU1NGesgD3P3o2d?mode=ac_c">• Lingue e letterature straniere</a></li>
+    <li><a href="https://chat.whatsapp.com/FNsScNLZqTiIf47re4Jvrq?mode=ac_c">• LM Languages, Literatures and Digital Culture</a></li>
+    <li><a href="https://chat.whatsapp.com/Hf1kAdvT0SP3lHEvveoNx7?mode=ac_c">• LM Lingue per la comunicazione turistica e commerciale</a></li>
+  </ul>
+</div>
+
+<!-- CLA -->
+<div class="classe collapsed" data-classe="CLA">
+  <h5>
+    <span class="dip-label">GRUPPI</span>
+    <span class="dip-name">CLA</span>
+  </h5>
+  <ul>
+    <li><a href="https://chat.whatsapp.com/L5nxRtkDN4xEWYUT0ph7wj">• Inglese B1</a></li>
+    <li><a href="https://chat.whatsapp.com/EPX21Lidl1S7cMntBnv33p">• Inglese B2</a></li>
+    <li><a href="https://chat.whatsapp.com/Glxao14sN7t72v6Zuh6WHs">• Inglese B2 Intensivo</a></li>
+    <li><a href="https://chat.whatsapp.com/CGwv9QAiwXwEpkAL9zsPdM">• Inglese C1</a></li>
+    <li><a href="https://chat.whatsapp.com/DgMpEQ7cwGV5b4mtxOD64Q">• Inglese C2</a></li>
+    <li><a href="https://chat.whatsapp.com/HYpXNiBHt7eHiFAbToGZvF">• Tedesco A2</a></li>
+    <li><a href="https://chat.whatsapp.com/HIphULu5mxzE06qOiIWRVk">• Tedesco B1</a></li>
+    <li><a href="https://chat.whatsapp.com/EQHKzQZkQE95XoPuGVaoAo">• Tedesco B2</a></li>
+    <li><a href="https://chat.whatsapp.com/DEiGVJ14SI6C1F0GFZxGEk?mode=ac_t">• Tedesco C1</a></li>
+    <li><a href="https://chat.whatsapp.com/DlqWInkHd4yDKtG3pgoyJq">• Spagnolo A2</a></li>
+    <li><a href="https://chat.whatsapp.com/J9iQ7G50LGtAkGVfoFVbk4">• Spagnolo B1</a></li>
+    <li><a href="https://chat.whatsapp.com/FR3eCrpdj7213pzX52n76z">• Spagnolo B2</a></li>
+    <li><a href="https://chat.whatsapp.com/FjphXzhDI2O2GujYbnp5SD">• Spagnolo C1</a></li>
+    <li><a href="https://chat.whatsapp.com/LDUWAUXsCnrBYLnxsqP2M2">• Spagnolo C2</a></li>
+    <li><a href="https://chat.whatsapp.com/Jged3VFcwSJLN6cYS1hZzJ">• Francese A2</a></li>
+    <li><a href="https://chat.whatsapp.com/BhP83LtBzLKC0MKBe0nt0L">• Francese B1</a></li>
+    <li><a href="https://chat.whatsapp.com/JBNtL7CULsGAvU9S5h7pQH">• Francese B2</a></li>
+    <li><a href="https://chat.whatsapp.com/EDPZJbjfR8Y8Vf4GeGW6Ko">• Francese C1</a></li>
+  </ul>
+</div>
+
+
+<!-- MEDICINA E CHIRURGIA -->
+<div class="classe collapsed" data-classe="Medicina" style="grid-column: 1 / -1;">
+  <h5>
+    <span class="dip-label">FACOLTÀ DI</span>
+    <span class="dip-name">MEDICINA E CHIRURGIA</span>
+  </h5>
+  <ul>
+    <li><a href="https://chat.whatsapp.com/JxBPcbyG3r9CKpr29YVAvu">• Laurea in Assistenza sanitaria</a></li>
+    <li><a href="https://chat.whatsapp.com/GGhvyP9Akt58g7qP9Xq0Ct">• Laurea in Fisioterapia</a></li>
+    <li><a href="https://chat.whatsapp.com/GvnjMSBnOyaAc4zYPj0WEI">• Laurea in logopedia</a></li>
+    <li><a href="https://chat.whatsapp.com/DZFvWXqzpvm6rOS0kPffIT">• Laurea in Infermieristica</a></li>
+    <li><a href="https://chat.whatsapp.com/H31HNNpKEQsKILFNL6If1G?mode=ac_t">• Laurea in Ostetricia</a></li>
+    <li><a href="https://chat.whatsapp.com/K01MRz9nx2r5SmfY2TLuqx">• Laurea in Igiene dentale</a></li>
+    <li><a href="https://chat.whatsapp.com/DN0mBzNu7Po5rlUFTsM7Ij">• Laurea in Tecniche di fisiopatologia cardiocircolatoria e perfusione cardiovascolare</a></li>
+    <li><a href="https://chat.whatsapp.com/E1B1jgfUMZD23bTAVTwRW3">• Laurea in Tecniche di laboratorio biomedico</a></li>
+    <li><a href="https://chat.whatsapp.com/KnHfOBj0zXaGTqgZ7cPWo6">• Laurea in Tecniche di radiologia medica, per immagini e radioterapia</a></li>
+    <li><a href="https://chat.whatsapp.com/HRhbAwuGGoz2asrIaYIlHF">• Laurea in tecniche ortopediche</a></li>
+    <li><a href="https://chat.whatsapp.com/JFlSBxH0B7052gYtGVKiEL">• Laurea in Scienze motorie, sport e benessere</a></li>
+    <li><a href="https://chat.whatsapp.com/KhHwYZe5aHA0j4Nq8oLJEp">• Semestre Filtro per l’accesso a Medicina e chirurgia Odontoiatria e protesi dentaria</a></li>
+    <li><a href="https://chat.whatsapp.com/JFlSBxH0B7052gYtGVKiEL">• LM delle attività motorie e sportive</a></li>
+    <li><a href="https://chat.whatsapp.com/Ey7VvvBm2h17QoDcuMFZa2">• LM in biology for translational research and precision medicine</a></li>
+    <li><a href="https://chat.whatsapp.com/HQ68hriqmMm74Wox3uotZW">• LM in Scienze delle professioni sanitarie tecniche assistenziali</a></li>
+    <li><a href="https://chat.whatsapp.com/GD8FS2DMTwkGcj1maqDaXX">• LM in Scienze infermieristiche e ostetriche</a></li>
+    <li><a href="https://chat.whatsapp.com/LeEC77S0h8MJZzSUHlNu6q">• LM in Scienze motorie e preventive ed adattate</a></li>
+    <li><a href="https://chat.whatsapp.com/FT0QZjoeDxS61VMTF6G3W5">• LM in Scienze riabilitative delle professioni sanitarie</a></li>
+    <li><a href="https://chat.whatsapp.com/FJ3dL89jykLCg2yHKpPuV7">• LM interateneo in Scienze dello sport e della prestazione fisica</a></li>
+    <li><a href="https://chat.whatsapp.com/JnBaKn62wBDCYWcDFGutC0?mode=ac_t">• LM a ciclo unico in Farmacia</a></li>
+    <li><a href="https://chat.whatsapp.com/FXgTeMrittO8VRHcV4kCkC">• Laurea magistrale a ciclo unico in Medicina e Chirurgia</a></li>
+    <li><a href="https://chat.whatsapp.com/GEuvX904nJd05lTn3YDU7T?mode=ac_t">• Laurea magistrale a ciclo unico in Medicina e Chirurgia ad indirizzo tecnologico</a></li>
+    <li><a href="https://chat.whatsapp.com/FLigmMvUEqi3vGpgX5zmCU?mode=ac_t">• Laurea magistrale a ciclo unico in Odontoiatria e protesi dentaria</a></li>
+  </ul>
+</div>
+
+<!-- GRUPPI UTILI PER TUTTI -->
+<div class="classe collapsed" data-classe="GRUPPI UTILI PER TUTTI" style="grid-column: 1 / -1;">
+  <h5>
+    <span class="dip-label">GRUPPI</span>
+    <span class="dip-name">UTILI PER TUTTI</span>
+  </h5>
+  <ul>
+    <li><a href="https://chat.whatsapp.com/HDRhOJlsf49F4fXUWBi0Qv">• Erasmus in Verona</a></li>
+    <li><a href="https://chat.whatsapp.com/CxUGHZCbStF8iNyMBUzcRW">• Erasmus 2025/26</a></li>
+    <li><a href="https://chat.whatsapp.com/L9ghIHxaRVN3djTUoV18Gj">• Case in affitto</a></li>
+    <li><a href="https://chat.whatsapp.com/Gn1vpw4d39TAiiRXMWk5lj">• Feste ed eventi a Verona</a></li>
+    <li><a href="https://chat.whatsapp.com/HKNZfJ4ViVD81tY2Ip3FHw">• Alloggi ESU</a></li>
   </ul>
 </div>
     </div>
   </div>
 
-  <footer style="background-color: #23272b; color: #fff; padding: 3rem 0 2rem 0; margin-top: 3rem;">
+  <footer id="contatti-footer" style="background-color: #17407b; color: #fff; padding: 3rem 0 2rem 0; margin-top: 3rem; box-shadow:none; border:none;">
     <div class="container">
       <div class="row">
-        <div class="col-md-4 mb-4">
-          <h5 class="mb-3">Matricole Verona</h5>
-          <p>Risorse, informazioni e supporto per le nuove matricole dell'Università di Verona.</p>
-        </div>
-        <div class="col-md-4 mb-4"></div>
-        <div class="col-md-4 mb-4 d-flex flex-column align-items-end justify-content-center">
-          <h5 class="mb-3 text-end">Contatti</h5>
-          <ul class="list-unstyled text-start" style="text-align:left;">
-            <li><i class="fas fa-envelope me-2"></i> info.auvr@gmail.com</li>
-            <li><i class="fas fa-map-marker-alt me-2"></i> Verona, Italia</li>
-            <li><i class="fab fa-instagram fa-lg"></i> azioneuniversitariaverona</li>
-            <li><i class="fab fa-tiktok fa-lg"></i> azioneunivr</li>
+        <div class="col-md-8 mb-4">
+          <div class="footer-contatti-title">CONTATTI</div>
+          <ul class="footer-contatti-list list-unstyled">
+            <li><i class="fas fa-envelope"></i> info.auvr@gmail.com</li>
+            <li><i class="fas fa-map-marker-alt"></i> Via Campo fiore 17A, VERONA</li>
+            <li><i class="fab fa-instagram"></i> azioneuniversitariaverona</li>
+            <li><i class="fab fa-tiktok"></i> azioneunivr</li>
           </ul>
         </div>
+        <div class="col-md-4 mb-4 d-flex flex-column align-items-end justify-content-center">
+          <!-- Logo footer -->
+          <img src="logo-auvr-verona.png" alt="Azione Universitaria Verona" class="footer-logo">
+        </div>
       </div>
-      <hr style="border-color: #444;">
-      <div class="text-center" style="color:#bbb;">
+      <hr style="border-color: #fff;">
+      <div class="text-center" style="color:#fff;">
         <small>
-          <b>Disclaimer:</b> Questo sito non è in alcun modo affiliato, sponsorizzato o approvato dall'Università di Verona. 
+          <b>Disclaimer:</b> Questo sito non è in alcun modo affiliato, sponsorizzato o approvato dall'Università di Verona.
           È un progetto indipendente creato dagli studenti, con l'obiettivo di offrire rappresentanza, supporto e informazioni utili alla comunità studentesca.
         </small>
-      </div>
-      <div class="text-center" style="color:#bbb; margin-top:0.5rem;">
-        &copy; 2024 Matricole Verona. Tutti i diritti riservati.
       </div>
     </div>
   </footer>
@@ -907,8 +1359,8 @@
 
     // Colori moderni e stilosi per ogni classe
     const palette = [
-      "#F1CB08", "#E27400", "#00648C", "#ED578D", "#217500", "#FFFFFF", "#217500",
-      "#111111", "#BD0000", "#e6f0ff", "#f6f6e6", "#e6ffe6", "#f6e6ff", "#e6f6ff"
+      "#F1CB08", "#E27400", "#00648C", "#ED578D", "#217500", "#FFFFFF", "#111111",
+      "#840048", "#0000FF", "#BD0000", "#7E587E"
     ];
     classi.forEach((classe, idx) => {
       const color = palette[idx % palette.length];
