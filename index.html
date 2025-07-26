@@ -2,8 +2,11 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <title>Dipartimenti & Facoltà</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <title>Gruppi WhatsApp Università di Verona - Matricole UNIVR</title>
+  <meta name="description" content="Scopri i gruppi WhatsApp per i corsi di laurea dell'Università di Verona. Ideale per matricole UNIVR che vogliono rimanere aggiornate e connesse." />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
@@ -108,6 +111,8 @@
   .navbar .navbar-brand img {
     width: 120px;
     max-width: 70vw;
+    height: auto;
+    object-fit: contain;
   }
 }
     .navbar .lang-flags {
@@ -497,37 +502,23 @@
       position: relative;
       padding-left: 0.2rem;
     }
-    .classe ul li a {
-      color: #0052a3 !important;
-      text-decoration: underline;
-      border-radius: 0.2rem;
-      padding: 1px 4px;
-      transition: background 0.2s, color 0.2s, transform 0.15s;
-      font-weight: 500;
-      font-size: 0.93rem;
-      display: inline-block;
-    }
-    .classe ul li a:hover {
-      color: #ffd700 !important;
-      background: none !important;
-      transform: scale(1.08);
-      text-decoration: underline;
-    }
-    .search-link {
-      color: #0052a3 !important;
-      text-decoration: underline;
-      border-radius: 0.2rem;
-      padding: 1px 4px;
-      transition: background 0.2s, color 0.2s;
-      font-weight: 500;
-      font-size: 0.93rem;
-      display: inline-block;
-    }
-    .search-link:hover {
-      background: none !important;
-      color: #ffd700 !important;
-      text-decoration: underline;
-    }
+    .classe ul li a,
+.search-link {
+  color: inherit !important; /* Rimuove il colore specifico dei link */
+  text-decoration: underline;
+  border-radius: 0.2rem;
+  padding: 1px 4px;
+  transition: background 0.2s, transform 0.15s;
+  font-weight: 500;
+  font-size: 0.93rem;
+  display: inline-block;
+}
+.classe ul li a:hover,
+.search-link:hover {
+  background: none !important;
+  transform: scale(1.08);
+  text-decoration: underline;
+}
     footer {
       background: #17407b !important;
       border-top: none;
@@ -687,6 +678,26 @@
         align-items: center !important;
       }
     }
+    @media (max-width: 768px) {
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+  }
+  .navbar .navbar-brand img {
+    max-width: 100%;
+    max-height: 40px;
+    height: auto;
+    width: auto;
+  }
+  .contattaci-btn {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.8rem;
+    margin-left: auto;
+    margin-right: -5rem; /* Sposta ulteriormente più a destra */
+  }
+}
     /* Rimuovi le icone di sfondo e in h5 dalle classi */
     .classe .classe-bg-icon,
     .classe h5 .classe-h5-icon {
@@ -869,44 +880,44 @@
   </style>
 </head>
 <body>
+  <header>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg" style="width:100vw; position:relative; top:0; z-index:1050; border:none;">
     <div class="container-fluid p-0 m-0" style="min-height:70px;">
       <div class="d-flex w-100 align-items-center flex-wrap justify-content-between" style="min-height:70px;">
-        <!-- Logo a sinistra (desktop) o in alto (mobile) -->
+        <!-- Logo -->
         <div class="d-flex align-items-center">
           <span class="navbar-brand">
-            <!-- Logo Azione Universitaria -->
-            <img src="logo-auvr.png" alt="Azione Universitaria">
+            <img src="logo-auvr.png" alt="Logo Azione Universitaria Verona" loading="lazy">
           </span>
         </div>
-        <!-- Elementi destra navbar: bandiere, social, contattaci -->
+        <!-- Navbar right -->
         <div class="navbar-right d-flex align-items-center" style="gap:1.2rem;">
-          <!-- Bandiere -->
+          <!-- Language flags -->
           <div class="lang-flags d-flex align-items-center hide-mobile" style="gap:0.7rem;">
-            <img src="https://flagcdn.com/it.svg" alt="Italiano" class="lang-flag" title="Italiano">
-            <img src="https://flagcdn.com/gb.svg" alt="English" class="lang-flag" title="English">
+            <img src="https://flagcdn.com/it.svg" alt="Bandiera italiana - Italiano" class="lang-flag" title="Italiano" loading="lazy">
+            <img src="https://flagcdn.com/gb.svg" alt="Bandiera inglese - English" class="lang-flag" title="English" loading="lazy">
           </div>
-          <!-- Social -->
+          <!-- Social links -->
           <div class="navbar-social d-flex align-items-center hide-mobile" style="gap:1.1rem;">
-            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.instagram.com/azioneuniversitariaverona/" aria-label="Instagram Azione Universitaria Verona"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@azioneuniversitariavr" aria-label="TikTok Azione Universitaria Verona"><i class="fab fa-tiktok"></i></a>
           </div>
-          <!-- Contattaci -->
-          <a href="#contatti-footer" class="contattaci-btn">CONTATTACI</a>
+          <!-- Contact button -->
+          <a href="#contatti-footer" class="contattaci-btn">Contattaci</a>
         </div>
       </div>
     </div>
   </nav>
-
+  </header>
   <!-- Hero rettangolare blu con logo whatsapp bianco -->
   <div class="hero-section">
     <span class="hero-icon">
       <i class="fab fa-whatsapp"></i>
     </span>
     <div class="hero-content">
-      <h1>Gruppi Whatsapp UNIVR.</h1>
-      <p>sei una <b>matricola di UNIVR?</b> entra nel gruppo del tuo corso per <b>rimanere sempre sul pezzo!</b></p>
+      <h1>Gruppi WhatsApp UNIVR</h1>
+      <p>Sei una <b>matricola di UNIVR?</b> Entra nel gruppo del tuo corso per <b>rimanere sempre sul pezzo!</b></p>
     </div>
   </div>
 
@@ -1134,31 +1145,28 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8 mb-4">
-          <div class="footer-contatti-title">CONTATTI</div>
+          <div class="footer-contatti-title">Contatti</div>
           <ul class="footer-contatti-list list-unstyled">
-            <li><i class="fas fa-envelope"></i> info.auvr@gmail.com</li>
-            <li><i class="fas fa-map-marker-alt"></i> Via Campo fiore 17A, VERONA</li>
-            <li><i class="fab fa-instagram"></i> azioneuniversitariaverona</li>
-            <li><i class="fab fa-tiktok"></i> azioneunivr</li>
+            <li><i class="fas fa-envelope"></i> <a href="mailto:info.auvr@gmail.com" style="color: #fff; text-decoration: none;">info.auvr@gmail.com</a></li>
+            <li><i class="fas fa-map-marker-alt"></i> <a href="https://www.google.com/maps?q=Via+Campo+Fiore+17A,+Verona" target="_blank" style="color: #fff; text-decoration: none;" aria-label="posizione Azione Universitaria Verona">Via Campo Fiore 17A, Verona</a></li>
+            <li><i class="fab fa-instagram"></i> <a href="https://www.instagram.com/azioneuniversitariaverona/" target="_blank" style="color: #fff; text-decoration: none;" aria-label="Instagram Azione Universitaria Verona" >azioneuniversitariaverona</a></li>
+            <li><i class="fab fa-tiktok"></i> <a href="https://www.tiktok.com/@azioneuniversitariavr" target="_blank" style="color: #fff; text-decoration: none;" aria-label="Ticktock Azione Universitaria Verona">azioneunivr</a></li>
           </ul>
         </div>
         <div class="col-md-4 mb-4 d-flex flex-column align-items-end justify-content-center">
-          <!-- Logo footer -->
-          <img src="logo-auvr-verona.png" alt="Azione Universitaria Verona" class="footer-logo">
+          <img src="logo-auvr-verona.png" alt="Logo Azione Universitaria Verona Footer" class="footer-logo" loading="lazy">
         </div>
       </div>
       <hr style="border-color: #fff;">
       <div class="text-center" style="color:#fff;">
         <small>
-          <b>Disclaimer:</b> Questo sito non è in alcun modo affiliato, sponsorizzato o approvato dall'Università di Verona.
-          È un progetto indipendente creato dagli studenti, con l'obiettivo di offrire rappresentanza, supporto e informazioni utili alla comunità studentesca.
+          <b>Disclaimer:</b> Questo sito non è affiliato, sponsorizzato o approvato dall'Università di Verona. È un progetto indipendente creato dagli studenti per offrire supporto e informazioni utili alla comunità studentesca.
         </small>
       </div>
     </div>
   </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2" defer></script>
   <script>
   document.addEventListener('DOMContentLoaded', function() {
     const gridContainer = document.getElementById('gridContainer');
